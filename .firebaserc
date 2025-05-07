@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "hor-chanpheng"
-  }
+  },
+  "targets": {
+    "hor-chanpheng": {
+      "hosting": {
+        "horchanpheng": [
+          "horchanpheng"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

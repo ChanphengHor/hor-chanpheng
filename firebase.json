@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "horchanpheng",
     "public": "home",
     "ignore": [
       "firebase.json",
