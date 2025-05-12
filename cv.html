@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivia Wilson - CV</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      display: flex;
+      overflow: hidden;
+    }
+    .sidebar {
+      background: #f3f3f3;
+      width: 300px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-right: 1px solid #ececec;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      margin-bottom: 24px;
+    }
+    .contact-info {
+      width: 100%;
+      margin-bottom: 32px;
+    }
+    .contact-info div {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    .contact-info div i {
+      margin-right: 10px;
+      color: #039be5;
+      min-width: 18px;
+      text-align: center;
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #039be5;
+      margin: 24px 0 8px 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .sidebar-section {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    .sidebar-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+      color: #444;
+    }
+    .sidebar-section ul li {
+      margin-bottom: 6px;
+    }
+    .main {
+      flex: 1;
+      padding: 40px 40px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .name-title {
+      margin-bottom: 16px;
+    }
+    .name {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #222;
+    }
+    .title {
+      font-size: 1.1rem;
+      color: #666;
+      font-weight: 400;
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+    .profile {
+      margin-bottom: 32px;
+    }
+    .profile p {
+      color: #444;
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .work-section {
+      margin-bottom: 32px;
+    }
+    .work-section .section-title {
+      margin-bottom: 16px;
+    }
+    .work-entry {
+      margin-bottom: 20px;
+    }
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .work-role {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #333;
+    }
+    .work-company {
+      font-size: 0.98rem;
+      color: #039be5;
+      font-weight: 500;
+    }
+    .work-dates {
+      font-size: 0.95rem;
+      color: #888;
+      font-weight: 400;
+    }
+    .work-desc {
+      margin: 6px 0 0 0;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.5;
+    }
+    .references {
+      margin-top: 24px;
+    }
+    .reference-list {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .reference-item {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    .reference-item strong {
+      color: #222;
+    }
+    @media (max-width: 900px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ececec; }
+      .main { padding: 32px 16px; }
+    }
+    @media (max-width: 600px) {
+      .container { margin: 0; border-radius: 0; box-shadow: none; }
+      .sidebar, .main { padding: 20px 8px; }
+      .main { padding-top: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="profile-pic">
+      <div class="contact-info">
+        <div><i>📞</i> +123-456-7890</div>
+        <div><i>✉️</i> hello@reallygreatsite.com</div>
+        <div><i>🌐</i> www.reallygreatsite.com</div>
+        <div><i>🏠</i> 123 Anywhere St., Any City, ST 12345</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="section-title">Education</div>
+        <ul>
+          <li><strong>Bachelor of Design</strong><br>Wanderer University<br>2006 - 2010</li>
+          <li><strong>Bachelor of Design</strong><br>Wanderer University<br>2006 - 2008</li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="section-title">Expertise</div>
+        <ul>
+          <li>Digital Marketing</li>
+          <li>Branding</li>
+          <li>Copywriting</li>
+          <li>SEO</li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="section-title">Language</div>
+        <ul>
+          <li>English</li>
+          <li>French</li>
+        </ul>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="name-title">
+        <div class="name">OLIVIA WILSON</div>
+        <div class="title">Graphics Designer</div>
+      </div>
+      <div class="profile">
+        <div class="section-title">Profile</div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+      <div class="work-section">
+        <div class="section-title">Work Experience</div>
+        <div class="work-entry">
+          <div class="work-header">
+            <span class="work-role">Product Design Manager</span>
+            <span class="work-company">Ginyard International Co.</span>
+            <span class="work-dates">2020 - 2023</span>
+          </div>
+          <div class="work-desc">
+            <ul>
+              <li>Working with the wider development team.</li>
+              <li>Manage design, web content, and SEO Marketing.</li>
+              <li>Branding and Logo Design.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="work-entry">
+          <div class="work-header">
+            <span class="work-role">Product Design Manager</span>
+            <span class="work-company">Arowand Industries</span>
+            <span class="work-dates">2019 - 2020</span>
+          </div>
+          <div class="work-desc">
+            <ul>
+              <li>Working with the wider development team.</li>
+              <li>Manage design, web content, and SEO Marketing.</li>
+              <li>Branding and Logo Design.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="work-entry">
+          <div class="work-header">
+            <span class="work-role">Product Design Manager</span>
+            <span class="work-company">Ginyard International Co.</span>
+            <span class="work-dates">2017 - 2019</span>
+          </div>
+          <div class="work-desc">
+            <ul>
+              <li>Working with the wider development team.</li>
+              <li>Manage design, web content, and SEO Marketing.</li>
+              <li>Branding and Logo Design.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="work-entry">
+          <div class="work-header">
+            <span class="work-role">Product Design Manager</span>
+            <span class="work-company">Arowand Industries</span>
+            <span class="work-dates">2017</span>
+          </div>
+          <div class="work-desc">
+            <ul>
+              <li>Working with the wider development team.</li>
+              <li>Manage design, web content, and SEO Marketing.</li>
+              <li>Branding and Logo Design.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="references">
+        <div class="section-title">References</div>
+        <div class="reference-list">
+          <div class="reference-item">
+            <strong>Bailey Dupont</strong><br>
+            Wardlore Inc. / CEO<br>
+            Phone: 123-456-7890<br>
+            Email: hello@reallygreatsite.com
+          </div>
+          <div class="reference-item">
+            <strong>Harumi Kobayashi</strong><br>
+            Wardlore Inc. / CEO<br>
+            Phone: 123-456-7890<br>
+            Email: hello@reallygreatsite.com
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html> 

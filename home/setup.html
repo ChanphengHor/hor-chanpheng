@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup CV Data</title>
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    button {
+      background: #039be5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #0288d1;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    #status {
+      margin: 20px 0;
+      padding: 10px;
+      background: #f9f9f9;
+      border-left: 4px solid #039be5;
+    }
+    #done {
+      display: none;
+      margin-top: 20px;
+      padding: 10px;
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Setup CV Data in Firestore</h1>
+  
+  <p>This page will populate your Firestore database with sample CV data. This is a one-time setup process.</p>
+  
+  <button onclick="setupCVData()">Initialize CV Data</button>
+  
+  <div id="status">Ready to initialize data...</div>
+  
+  <div id="done">
+    <p>Setup complete! Your CV data is now in Firestore.</p>
+    <p>You can now <a href="index.html">view your CV</a>, which will load data from Firestore.</p>
+  </div>
+  
+  <h2>Data Structure</h2>
+  <p>The following data structure will be created in Firestore:</p>
+  <pre>
+Collection: 'cv'
+Document: 'main'
+Fields:
+- profileImage: URL to profile image
+- name: Your name
+- title: Your professional title
+- profile: About text
+- phone, email, website, address: Contact info
+- education: Array of education entries
+- expertise: Array of skills/expertise
+- languages: Array of languages
+- work: Array of work experience entries
+- references: Array of references
+  </pre>
+  
+  <script src="setup-data.js"></script>
+</body>
+</html> 
