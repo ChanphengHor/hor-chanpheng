@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Storage Demo</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Storage -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1 {
+      color: #3a4453;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #3a4453;
+      margin-top: 30px;
+    }
+    .section {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    input[type="file"] {
+      margin: 10px 0;
+      display: block;
+    }
+    button {
+      background: #3a4453;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #4b5769;
+    }
+    .progress-bar {
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: #4CAF50;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    .file-list {
+      margin-top: 20px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: white;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .file-name {
+      flex-grow: 1;
+      margin-right: 15px;
+    }
+    .file-actions {
+      display: flex;
+      gap: 5px;
+    }
+    .file-actions button {
+      padding: 5px 10px;
+      margin: 0;
+    }
+    .btn-view {
+      background: #039be5;
+    }
+    .btn-delete {
+      background: #e53935;
+    }
+    #status {
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #3a4453;
+    }
+    .error {
+      color: #e53935;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Firebase Storage Demo</h1>
+  
+  <div class="section">
+    <h2>Upload Files</h2>
+    <form id="uploadForm">
+      <input type="file" id="fileInput">
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+      <button type="submit">Upload File</button>
+    </form>
+    <div id="uploadStatus"></div>
+  </div>
+  
+  <div class="section">
+    <h2>Your Files</h2>
+    <div id="fileList" class="file-list">
+      <p>Loading files...</p>
+    </div>
+  </div>
+
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
+      authDomain: "hor-chanpheng.firebaseapp.com",
+      projectId: "hor-chanpheng",
+      storageBucket: "hor-chanpheng.appspot.com"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    // Initialize Firebase Storage
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    
+    // DOM elements
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const progressBar = document.getElementById('progressBar');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const fileList = document.getElementById('fileList');
+    
+    // Function to upload a file
+    uploadForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!fileInput.files.length) {
+        uploadStatus.innerHTML = '<p class="error">Please select a file first</p>';
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const fileRef = storageRef.child(`cv-files/${file.name}`);
+      
+      // Upload file
+      const uploadTask = fileRef.put(file);
+      
+      // Monitor upload progress
+      uploadTask.on('state_changed', 
+        // Progress function
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          progressBar.style.width = progress + '%';
+          uploadStatus.textContent = `Upload is ${Math.round(progress)}% done`;
+        },
+        // Error function
+        (error) => {
+          uploadStatus.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+          console.error('Upload failed:', error);
+        },
+        // Complete function
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            uploadStatus.innerHTML = `<p>File uploaded successfully! <a href="${downloadURL}" target="_blank">View file</a></p>`;
+            fileInput.value = '';
+            loadFiles(); // Refresh file list
+          });
+        }
+      );
+    });
+    
+    // Function to load and display files
+    function loadFiles() {
+      const filesRef = storageRef.child('cv-files');
+      
+      filesRef.listAll()
+        .then((res) => {
+          if (res.items.length === 0) {
+            fileList.innerHTML = '<p>No files found. Upload some files first.</p>';
+            return;
+          }
+          
+          fileList.innerHTML = ''; // Clear list
+          
+          res.items.forEach((itemRef) => {
+            // Get file metadata and download URL
+            itemRef.getMetadata().then((metadata) => {
+              itemRef.getDownloadURL().then((url) => {
+                // Create file item element
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                // File name and size
+                const fileSize = formatBytes(metadata.size);
+                const fileName = document.createElement('div');
+                fileName.className = 'file-name';
+                fileName.textContent = `${metadata.name} (${fileSize})`;
+                
+                // File actions
+                const fileActions = document.createElement('div');
+                fileActions.className = 'file-actions';
+                
+                // View button
+                const viewBtn = document.createElement('button');
+                viewBtn.className = 'btn-view';
+                viewBtn.textContent = 'View';
+                viewBtn.addEventListener('click', () => {
+                  window.open(url, '_blank');
+                });
+                
+                // Delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-delete';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.addEventListener('click', () => {
+                  if (confirm(`Are you sure you want to delete ${metadata.name}?`)) {
+                    itemRef.delete().then(() => {
+                      fileItem.remove();
+                      if (fileList.children.length === 0) {
+                        fileList.innerHTML = '<p>No files found. Upload some files first.</p>';
+                      }
+                    }).catch((error) => {
+                      alert(`Error deleting file: ${error.message}`);
+                    });
+                  }
+                });
+                
+                // Append elements
+                fileActions.appendChild(viewBtn);
+                fileActions.appendChild(deleteBtn);
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(fileActions);
+                fileList.appendChild(fileItem);
+              });
+            });
+          });
+        })
+        .catch((error) => {
+          fileList.innerHTML = `<p class="error">Error loading files: ${error.message}</p>`;
+        });
+    }
+    
+    // Helper function to format bytes
+    function formatBytes(bytes, decimals = 2) {
+      if (bytes === 0) return '0 Bytes';
+      
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+    
+    // Load files when page loads
+    document.addEventListener('DOMContentLoaded', loadFiles);
+  </script>
+</body>
+</html> 

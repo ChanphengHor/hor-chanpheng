@@ -9,6 +9,59 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// Initialize Firebase services
+const db = firebase.firestore();
+const storage = firebase.storage();
+const storageRef = storage.ref();
+
+// Function to upload a file to Firebase Storage
+function uploadFile(file, folder = 'cv-files') {
+  return new Promise((resolve, reject) => {
+    // Create a storage reference
+    const fileRef = storageRef.child(`${folder}/${file.name}`);
+    
+    // Upload the file
+    const uploadTask = fileRef.put(file);
+    
+    // Register event handlers
+    uploadTask.on('state_changed', 
+      // Progress function
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      }, 
+      // Error function
+      (error) => {
+        console.error('Upload failed:', error);
+        reject(error);
+      }, 
+      // Complete function
+      () => {
+        // Get the download URL
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          resolve(downloadURL);
+        });
+      }
+    );
+  });
+}
+
+// Function to get a download URL for a file
+function getFileURL(path) {
+  return storageRef.child(path).getDownloadURL();
+}
+
+// Function to list files in a folder
+function listFiles(folder = 'cv-files') {
+  return storageRef.child(folder).listAll();
+}
+
+// Function to delete a file
+function deleteFile(path) {
+  return storageRef.child(path).delete();
+}
+
 // Router functionality
 function router() {
   const hash = window.location.hash || '#/';
@@ -43,7 +96,7 @@ function renderCV(cvData) {
   contactInfo.innerHTML = `
     <div><i>📞</i> Phone: ${cvData.phone}</div>
     <div><i>✉️</i> Email: ${cvData.email}</div>
-    <div><i>🌐</i> LinkedIn: ${cvData.website}</div>
+    <div><i>🌐</i> Linkin: ${cvData.website}</div>
     <div><i>🏠</i> Address: ${cvData.address}</div>
   `;
   

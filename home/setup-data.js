@@ -13,74 +13,63 @@ const db = firebase.firestore();
 
 // Sample CV data
 const cvData = {
-  profileImage: "https://randomuser.me/api/portraits/women/44.jpg",
-  phone: "+123-456-7890",
-  email: "hello@reallygreatsite.com",
-  website: "www.reallygreatsite.com",
-  address: "123 Anywhere St., Any City, ST 12345",
-  name: "OLIVIA WILSON",
-  title: "Graphics Designer",
-  profile: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  profileImage: "https://horchanpheng.web.app/profile_pic.jpg",
+  phone: "+855-175-640-28",
+  email: "chanpheng123@gmail.com",
+  website: "Hor Chanpheng",
+  address: "Home No.6K Group 02, Street 149DT, Phnom Penh, Cambodia",
+  name: "Hor Chanpheng",
+  title: "Senior Android Developer",
+  profile: "I was a senior android developer at Busan South Korea. I have 7 years of experience in android development and 2 years of experience in web development.",
   education: [
-    { degree: "Bachelor of Design", school: "Wanderer University", years: "2006 - 2010" },
-    { degree: "Bachelor of Design", school: "Wanderer University", years: "2006 - 2008" }
+    { degree: "Studied Software Expert", school: "Korea Software HRD Center", years: "2017 - 2018" },
+    { degree: "Bachelor of IT Information", school: "Build Bright University", years: "2013 - 2017" }
   ],
-  expertise: ["Digital Marketing", "Branding", "Copywriting", "SEO"],
-  languages: ["English", "French"],
+  expertise: ["Team Leading", "Android Developer", "Java/Kotlin", "Compose", "ViewModel", "Android Hilt", "Retrofit", "Coroutine", "Room", "Firebase", "Git", "Github", "Gitlab", "..."],
+  languages: ["Khmer", "English", "Korean"],
   work: [
     {
-      role: "Product Design Manager",
-      company: "Ginyard International Co.",
-      years: "2020 - 2023",
+      role: "Android Team Lead",
+      company: "Busan, South Korea",
+      years: "2023 - Present",
       desc: [
-        "Working with the wider development team.",
-        "Manage design, web content, and SEO Marketing.",
-        "Branding and Logo Design."
+        "Assign the Task to the team.",
+        "Manage the team to complete the task.",
+        "Review the code of the team.",
       ]
     },
     {
-      role: "Product Design Manager",
-      company: "Arowand Industries",
-      years: "2019 - 2020",
+      role: "Android Team Lead",
+      company: "KOSIGN (Cambodia) Investment Co., Ltd.",
+      years: "2018 - 2023",
       desc: [
         "Working with the wider development team.",
-        "Manage design, web content, and SEO Marketing.",
-        "Branding and Logo Design."
+        "Manage and develop the app.",
+        "Assign the task to the team member."
       ]
     },
     {
-      role: "Product Design Manager",
-      company: "Ginyard International Co.",
-      years: "2017 - 2019",
+      role: "Computer/English Teacher",
+      company: "Khmer New Generation Organization",
+      years: "2016 - 2017",
       desc: [
-        "Working with the wider development team.",
-        "Manage design, web content, and SEO Marketing.",
-        "Branding and Logo Design."
-      ]
-    },
-    {
-      role: "Product Design Manager",
-      company: "Arowand Industries",
-      years: "2017",
-      desc: [
-        "Working with the wider development team.",
-        "Manage design, web content, and SEO Marketing.",
-        "Branding and Logo Design."
+        "Teaching Computer and English to the students.",
+        "Join Activity and Event to improve the teaching skills."
       ]
     }
   ],
   references: [
     {
-      name: "Bailey Dupont",
-      position: "Wardlore Inc. / CEO",
+      name: "Person 1",
+      position: "CEO",
       phone: "123-456-7890",
-      email: "hello@reallygreatsite.com"
+      email: "test@gmail.com"
     },
     {
-      name: "Harumi Kobayashi",
-      position: "Wardlore Inc. / CEO",
+      name: "Person 2",
+      position: "CEO",
       phone: "123-456-7890",
-      email: "hello@reallygreatsite.com"
+      email: "test@gmail.com"
     }
   ]
 };
