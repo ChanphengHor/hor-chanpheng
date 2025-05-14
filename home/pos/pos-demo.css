@@ -286,10 +286,10 @@ body {
   .order-panel { padding: 0; }
 }
 
-/* Login Modal Styles */
+/* Simple Login Redesign */
 body.login-bg {
   min-height: 100vh;
-  background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+  background: linear-gradient(135deg, #4a90e2 0%, #26547c 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -297,85 +297,64 @@ body.login-bg {
 #loginModal {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+  background: linear-gradient(135deg, #4a90e2 0%, #26547c 100%);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
-.login-box {
-  background: rgba(255,255,255,0.85);
-  border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(80,0,80,0.12);
-  padding: 48px 32px 32px 32px;
-  min-width: 340px;
-  max-width: 90vw;
-  position: relative;
-  text-align: center;
-}
-.login-avatar {
-  width: 80px; height: 80px;
-  background: #1a2956;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  position: absolute; left: 50%; top: -40px; transform: translateX(-50%);
-  border: 6px solid #fff;
-}
-.login-avatar svg {
-  width: 44px; height: 44px; color: #fff;
-}
-.login-input-group {
-  display: flex; align-items: center;
-  background: #1a2956;
-  border-radius: 6px;
-  margin-bottom: 18px;
-  padding: 0 10px;
-}
-.login-input-group .icon {
-  color: #fff;
-  font-size: 1.2em;
-  margin-right: 8px;
-}
-.login-input-group input {
+.simple-login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: transparent;
-  border: none;
-  outline: none;
+  padding: 0;
+  min-width: 320px;
+  max-width: 90vw;
+}
+.simple-login-input {
+  width: 260px;
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  border: 1.5px solid rgba(255,255,255,0.7);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
   color: #fff;
-  padding: 12px 0;
-  width: 100%;
+  font-size: 1.15em;
+  outline: none;
+  transition: border 0.2s;
+}
+.simple-login-input:focus {
+  border: 1.5px solid #fff;
+}
+.simple-login-input::placeholder {
+  color: #fff;
+  opacity: 0.85;
   font-size: 1.08em;
 }
-.login-options {
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: 0.98em;
-  margin-bottom: 18px;
-  color: #1a2956;
-}
-.login-options label {
-  display: flex; align-items: center;
+.simple-login-btn {
+  width: 180px;
+  padding: 13px 0;
+  background: #fff;
+  color: #00e6c3;
+  font-size: 1.18em;
+  font-weight: 600;
+  border: none;
+  border-radius: 7px;
+  margin: 0 auto 0 auto;
   cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: background 0.2s, color 0.2s;
 }
-.login-options input[type=checkbox] {
-  margin-right: 6px;
+.simple-login-btn:hover {
+  background: #e6f9f7;
+  color: #009e8e;
 }
-.login-options a {
-  color: #1a2956; text-decoration: none; opacity: 0.7;
-  transition: opacity 0.2s;
+.simple-login-error {
+  color: #fff;
+  margin-top: 10px;
+  min-height: 1.5em;
+  text-align: center;
+  font-size: 1em;
 }
-.login-options a:hover {
-  opacity: 1;
-}
-#loginError {
-  color: #c00; font-size: 0.98em; min-height: 1.5em; text-align: center; margin-bottom: 10px;
-}
-#loginBtn {
-  width: 100%; padding: 12px 0;
-  background: linear-gradient(90deg, #1a2956 0%, #3a4a7c 100%);
-  color: #fff; border: none; border-radius: 8px;
-  font-size: 1.13em; font-weight: 600;
-  letter-spacing: 0.08em;
-  box-shadow: 0 2px 8px rgba(80,0,80,0.08);
-  margin-top: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-#loginBtn:hover {
-  background: linear-gradient(90deg, #3a4a7c 0%, #1a2956 100%);
+/* Remove previous login modal styles if needed */
+#loginModal .login-box, #loginModal .login-avatar, #loginModal .login-input-group, #loginModal .login-options, #loginBtn, #loginError {
+  display: none !important;
 } 

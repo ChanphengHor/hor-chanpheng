@@ -13,25 +13,11 @@
 </head>
 <body class="login-bg">
   <div id="loginModal">
-    <div class="login-box">
-      <div class="login-avatar">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
-      </div>
-      <h2 style="margin-top:48px;font-size:1.5em;text-align:center;">Login</h2>
-      <div class="login-input-group">
-        <span class="icon">&#xf007;</span>
-        <input id="loginUser" type="text" placeholder="Email ID" style="font-family:inherit;">
-      </div>
-      <div class="login-input-group">
-        <span class="icon">&#xf023;</span>
-        <input id="loginPass" type="password" placeholder="Password" style="font-family:inherit;">
-      </div>
-      <div class="login-options">
-        <label><input type="checkbox" id="rememberMe"> Remember me</label>
-        <a href="#" onclick="alert('Please contact admin.');return false;">Forgot Password?</a>
-      </div>
-      <div id="loginError"></div>
-      <button id="loginBtn">LOGIN</button>
+    <div class="simple-login-box">
+      <input id="loginUser" type="text" placeholder="Username" class="simple-login-input">
+      <input id="loginPass" type="password" placeholder="Password" class="simple-login-input">
+      <button id="loginBtn" class="simple-login-btn">Login</button>
+      <div id="loginError" class="simple-login-error"></div>
     </div>
   </div>
   <div class="pos-container" style="display:none;">
