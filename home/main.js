@@ -62,26 +62,22 @@ function deleteFile(path) {
   return storageRef.child(path).delete();
 }
 
-// Router functionality
+// Router functionality (jQuery)
 function router() {
   const hash = window.location.hash || '#/';
   const page = hash.split('/')[1] || 'home';
   
   // Hide all pages
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  $('.page').removeClass('active');
   
   // Show the current page
-  const currentPage = document.getElementById(page);
-  if (currentPage) {
-    currentPage.classList.add('active');
-  }
+  $('#' + page).addClass('active');
 }
 
-// Listen for hash changes
-window.addEventListener('hashchange', router);
-window.addEventListener('load', router);
+$(window).on('hashchange', router);
+$(window).on('load', router);
 
-// Fetch CV data from Firestore and render
+// Fetch CV data from Firestore and render (jQuery)
 function renderCV(cvData) {
   console.log("Rendering CV with data:", cvData);
   
@@ -89,35 +85,31 @@ function renderCV(cvData) {
   document.title = `${cvData.name} - CV`;
   
   // Profile image
-  document.querySelector('.profile-pic').src = cvData.profileImage;
+  $('.profile-pic').attr('src', cvData.profileImage);
   
   // Contact info
-  const contactInfo = document.querySelector('.contact-info');
-  contactInfo.innerHTML = `
+  $('.contact-info').html(`
     <div><i>📞</i> Phone: ${cvData.phone}</div>
     <div><i>✉️</i> Email: ${cvData.email}</div>
     <div><i>🌐</i> Linkin: ${cvData.website}</div>
     <div><i>🏠</i> Address: ${cvData.address}</div>
-  `;
+  `);
   
   // Name and title
-  document.querySelector('.name').textContent = cvData.name;
-  document.querySelector('.title').textContent = cvData.title;
+  $('.name').text(cvData.name);
+  $('.title').text(cvData.title);
   
   // Profile summary
-  document.querySelector('.profile-text').textContent = cvData.profile;
+  $('.profile-text').text(cvData.profile);
   
   // Key Skills (from expertise data)
-  const skillsList = document.querySelector('.sidebar-section.skills ul');
-  skillsList.innerHTML = cvData.expertise.map(skill => `<li>${skill}</li>`).join('');
+  $('.sidebar-section.skills ul').html(cvData.expertise.map(skill => `<li>${skill}</li>`).join(''));
   
   // Technical Skills (from languages data - we'll adapt this)
-  const technicalList = document.querySelector('.sidebar-section.technical ul');
-  technicalList.innerHTML = cvData.languages.map(tech => `<li>${tech}</li>`).join('');
+  $('.sidebar-section.technical ul').html(cvData.languages.map(tech => `<li>${tech}</li>`).join(''));
   
   // Education
-  const educationSection = document.querySelector('.education-section');
-  educationSection.innerHTML = '<div class="section-title">EDUCATION:</div>' + 
+  $('.education-section').html('<div class="section-title">EDUCATION:</div>' + 
     cvData.education.map(edu => `
       <div class="education-entry">
         <h4>${edu.degree}</h4>
@@ -126,11 +118,10 @@ function renderCV(cvData) {
           <span class="education-year">${edu.years}</span>
         </div>
       </div>
-    `).join('');
+    `).join(''));
   
   // Work experience
-  const workSection = document.querySelector('.work-section');
-  workSection.innerHTML = '<div class="section-title">TEACHING EXPERIENCE:</div>' +
+  $('.work-section').html('<div class="section-title">TEACHING EXPERIENCE:</div>' +
     cvData.work.map(work => `
       <div class="work-entry">
         <div class="work-title">${work.company}</div>
@@ -144,17 +135,15 @@ function renderCV(cvData) {
           </ul>
         </div>
       </div>
-    `).join('');
+    `).join(''));
 
   // Hide loading indicator
-  const loadingEl = document.getElementById('loading');
-  if (loadingEl) loadingEl.style.display = 'none';
+  $('#loading').hide();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+$(function() {
   // Show loading indicator
-  const loadingEl = document.getElementById('loading');
-  if (loadingEl) loadingEl.style.display = 'block';
+  $('#loading').show();
   
   const db = firebase.firestore();
   db.collection('cv').doc('main').get()
@@ -164,12 +153,12 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         console.error("CV document does not exist!");
         alert("CV data not found. Please run the setup page first to initialize your CV data.");
-        if (loadingEl) loadingEl.style.display = 'none';
+        $('#loading').hide();
       }
     })
     .catch(error => {
       console.error("Error getting CV document:", error);
       alert("Error loading CV data: " + error.message);
-      if (loadingEl) loadingEl.style.display = 'none';
+      $('#loading').hide();
     });
 }); 
