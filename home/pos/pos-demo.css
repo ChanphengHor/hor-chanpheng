@@ -289,13 +289,6 @@ body {
 }
 
 /* Simple Login Redesign */
-body.login-bg {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4a90e2 0%, #26547c 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 #loginModal {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
