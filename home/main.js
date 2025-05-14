@@ -133,9 +133,9 @@ function renderCV(cvData) {
   workSection.innerHTML = '<div class="section-title">TEACHING EXPERIENCE:</div>' +
     cvData.work.map(work => `
       <div class="work-entry">
-        <div class="work-title">${work.role}</div>
+        <div class="work-title">${work.company}</div>
         <div class="work-details">
-          <span class="work-company">${work.company}</span>
+          <span class="work-company">${work.role}</span>
           <span class="work-location">${work.years}</span>
         </div>
         <div class="work-desc">
