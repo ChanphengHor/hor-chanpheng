@@ -131,6 +131,47 @@ $('.order-actions .proceed').on('click', function() {
   alert('Proceed to payment!');
 });
 
+// Login modal logic
+$(function() {
+  // If user is already logged in, skip login modal
+  if (localStorage.getItem('posUser')) {
+    $('#loginModal').hide();
+    $('.pos-container').show();
+    $('body').removeClass('login-bg');
+  } else {
+    $('.pos-container').hide();
+    $('#loginModal').show();
+  }
+
+  $('#loginBtn').on('click', function() {
+    const user = $('#loginUser').val();
+    const pass = $('#loginPass').val();
+    if (user === 'admin' && pass === 'Qwer1234!') {
+      localStorage.setItem('posUser', user);
+      $('#loginModal').fadeOut(200, function() {
+        $('.pos-container').fadeIn(200);
+        $('body').removeClass('login-bg');
+      });
+    } else {
+      $('#loginError').text('Invalid username or password.');
+    }
+  });
+  $('#loginPass').on('keypress', function(e) {
+    if (e.which === 13) $('#loginBtn').click();
+  });
+
+  // Logout handler
+  $('.sidebar .icon[title="Logout"]').on('click', function() {
+    localStorage.removeItem('posUser');
+    $('.pos-container').hide();
+    $('#loginModal').fadeIn(200);
+    $('body').addClass('login-bg');
+    $('#loginUser').val('');
+    $('#loginPass').val('');
+    $('#loginError').text('');
+  });
+});
+
 // Initial load
 fetchProducts();
 renderOrder(); 
