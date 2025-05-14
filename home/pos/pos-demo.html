@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restro POS Demo</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="pos-demo.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="pos-container">
+    <div class="sidebar">
+      <div class="icon active" title="Home">🏠</div>
+      <div class="icon" title="Customers">👤</div>
+      <div class="icon" title="Tables">🪑</div>
+      <div class="icon" title="Cashier">💵</div>
+      <div class="icon" title="Orders">🧾</div>
+      <div class="icon" title="Reports">📊</div>
+      <div class="icon" title="Settings">⚙️</div>
+      <div class="icon" title="Logout">⏻</div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="logo">Restro POS</div>
+        <div class="search"><input type="text" placeholder="Search products..." id="searchInput"></div>
+        <div class="actions">
+          <button class="select-table">Select Table</button>
+        </div>
+      </div>
+      <div class="menu-tabs">
+        <div class="tab active">Starters</div>
+        <div class="tab">Breakfast</div>
+        <div class="tab">Lunch</div>
+        <div class="tab">Supper</div>
+        <div class="tab">Deserts</div>
+        <div class="tab">Beverages</div>
+      </div>
+      <div class="product-grid" id="productGrid">
+        <!-- Products will be rendered here -->
+      </div>
+    </div>
+    <div class="order-panel">
+      <div class="add-customer">
+        <input type="text" placeholder="+ Add Customer" id="customerInput">
+      </div>
+      <div class="order-list" id="orderList">
+        <!-- Order items will be rendered here -->
+      </div>
+      <div class="order-summary" id="orderSummary">
+        <!-- Order summary will be rendered here -->
+      </div>
+      <div class="order-actions">
+        <button class="hold">Hold Order</button>
+        <button class="proceed">Proceed</button>
+      </div>
+    </div>
+  </div>
+  <script src="pos-demo.js"></script>
+</body>
+</html> 
