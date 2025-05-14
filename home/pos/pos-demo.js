@@ -1,9 +1,9 @@
-// Initialize Firebase
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+// Initialize Firebase (v8 SDK style)
+// Add Firebase App and Firestore scripts in your HTML before this script
+// <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 const firebaseConfig = {
-  // Your Firebase config will be here
   apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
   authDomain: "hor-chanpheng.firebaseapp.com",
   projectId: "hor-chanpheng",
@@ -13,8 +13,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
 
 let products = [];
 let order = [];
@@ -22,12 +24,8 @@ let order = [];
 // Fetch products from Firestore
 async function fetchProducts() {
   try {
-    const productsCollection = collection(db, 'products');
-    const productsSnapshot = await getDocs(productsCollection);
-    products = productsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const snapshot = await db.collection('products').get();
+    products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     renderProducts(products);
   } catch (error) {
     console.error("Error fetching products:", error);
