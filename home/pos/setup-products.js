@@ -1,9 +1,9 @@
-// Initialize Firebase
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getFirestore, collection, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+// This script populates Firestore with sample product data using Firebase v8 SDK
+// Add Firebase App and Firestore scripts in your HTML before this script
+// <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 const firebaseConfig = {
-  // Your Firebase config will be here
   apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
   authDomain: "hor-chanpheng.firebaseapp.com",
   projectId: "hor-chanpheng",
@@ -13,8 +13,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
 
 // Sample product data
 const products = [
@@ -32,21 +34,23 @@ const products = [
   { name: 'Chilli Garlic Thai Noodles', price: 24, img: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=facearea&w=400&h=400&q=80' }
 ];
 
-// Function to initialize products in Firestore
-export async function initializeProducts() {
-  try {
-    const productsCollection = collection(db, 'products');
-    
-    // Add each product to Firestore
-    for (const product of products) {
-      const docRef = doc(productsCollection);
-      await setDoc(docRef, product);
-      console.log(`Added product: ${product.name}`);
-    }
-    
-    console.log('All products added successfully!');
-  } catch (error) {
-    console.error("Error adding products:", error);
-    throw error;
-  }
+// Function to populate Firestore with products
+function setupProducts() {
+  document.getElementById('status').textContent = 'Setting up products...';
+  const batch = db.batch();
+  const productsCollection = db.collection('products');
+
+  products.forEach(product => {
+    const docRef = productsCollection.doc();
+    batch.set(docRef, product);
+  });
+
+  batch.commit()
+    .then(() => {
+      document.getElementById('status').textContent = 'Products successfully uploaded to Firestore!';
+      document.getElementById('done').style.display = 'block';
+    })
+    .catch((error) => {
+      document.getElementById('status').textContent = `Error setting up products: ${error}`;
+    });
 } 
