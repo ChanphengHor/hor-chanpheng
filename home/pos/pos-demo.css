@@ -316,8 +316,8 @@ body.login-bg {
   width: 260px;
   margin-bottom: 18px;
   padding: 14px 18px;
-  border: 1.5px solid rgba(255,255,255,0.7);
-  border-radius: 6px;
+  border: 1.5px solid #ff9800;
+  border-radius: 7px;
   background: rgba(255,255,255,0.08);
   color: #fff;
   font-size: 1.15em;
@@ -325,7 +325,7 @@ body.login-bg {
   transition: border 0.2s;
 }
 .simple-login-input:focus {
-  border: 1.5px solid #fff;
+  border: 1.5px solid #ff9800;
 }
 .simple-login-input::placeholder {
   color: #fff;
@@ -335,8 +335,8 @@ body.login-bg {
 .simple-login-btn {
   width: 180px;
   padding: 13px 0;
-  background: #fff;
-  color: #00e6c3;
+  background: #ff9800;
+  color: #fff;
   font-size: 1.18em;
   font-weight: 600;
   border: none;
@@ -347,11 +347,11 @@ body.login-bg {
   transition: background 0.2s, color 0.2s;
 }
 .simple-login-btn:hover {
-  background: #e6f9f7;
-  color: #009e8e;
+  background: #ffa733;
+  color: #fff;
 }
 .simple-login-error {
-  color: #fff;
+  color: #e53935;
   margin-top: 10px;
   min-height: 1.5em;
   text-align: center;
