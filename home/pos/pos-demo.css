@@ -297,8 +297,10 @@ body.login-bg {
 #loginModal {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: linear-gradient(135deg, #4a90e2 0%, #26547c 100%);
+  background: linear-gradient(135deg, #2a4a6e 0%, #18304a 100%);
+  background-color: rgba(30, 40, 60, 0.7);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
+  backdrop-filter: blur(10px);
 }
 .simple-login-box {
   display: flex;
