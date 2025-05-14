@@ -139,7 +139,6 @@ $(function() {
     $('.pos-container').show();
     $('body').removeClass('login-bg');
   } else {
-    $('.pos-container').hide();
     $('#loginModal').show();
   }
 
@@ -163,7 +162,6 @@ $(function() {
   // Logout handler
   $('.sidebar .icon[title="Logout"]').on('click', function() {
     localStorage.removeItem('posUser');
-    $('.pos-container').hide();
     $('#loginModal').fadeIn(200);
     $('body').addClass('login-bg');
     $('#loginUser').val('');
