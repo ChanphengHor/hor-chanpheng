@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>Setup Products</h1>
+  <p>Click the button below to initialize products in Firestore.</p>
+  <button onclick="runSetup()">Initialize Products</button>
+  <div id="status"></div>
+
+  <script type="module">
+    import { initializeProducts } from './setup-products.js';
+    
+    window.runSetup = async function() {
+      const statusDiv = document.getElementById('status');
+      try {
+        await initializeProducts();
+        statusDiv.className = 'success';
+        statusDiv.textContent = 'Products initialized successfully!';
+      } catch (error) {
+        statusDiv.className = 'error';
+        statusDiv.textContent = 'Error: ' + error.message;
+      }
+    };
+  </script>
+</body>
+</html> 

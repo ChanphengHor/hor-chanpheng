@@ -1,20 +1,39 @@
-// Sample product data
-const products = [
-  { id: 1, name: 'Schezwan Egg Noodles', price: 24, img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 2, name: 'Stir Egg Fry Udon Noodles', price: 24, img: 'https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 3, name: 'Thai Style Fried Noodles', price: 24, img: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 4, name: 'Chinese Prawn Spaghetti', price: 24, img: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 5, name: 'Japanese Soba Noodles', price: 24, img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 6, name: 'Chinese Prawn Spaghetti', price: 24, img: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 7, name: 'Chilli Garlic Thai Noodles', price: 24, img: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 8, name: 'Schezwan Egg Noodles', price: 24, img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 9, name: 'Thai Style Fried Noodles', price: 24, img: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 10, name: 'Schezwan Egg Noodles', price: 24, img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 11, name: 'Stir Egg Fry Udon Noodles', price: 24, img: 'https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=facearea&w=400&h=400&q=80' },
-  { id: 12, name: 'Chilli Garlic Thai Noodles', price: 24, img: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=facearea&w=400&h=400&q=80' }
-];
+// Initialize Firebase
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
+const firebaseConfig = {
+  // Your Firebase config will be here
+  apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
+  authDomain: "hor-chanpheng.firebaseapp.com",
+  projectId: "hor-chanpheng",
+  storageBucket: "hor-chanpheng.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abcdef1234567890"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let products = [];
 let order = [];
+
+// Fetch products from Firestore
+async function fetchProducts() {
+  try {
+    const productsCollection = collection(db, 'products');
+    const productsSnapshot = await getDocs(productsCollection);
+    products = productsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    renderProducts(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    $('#productGrid').html('<p style="color:#888;text-align:center;margin-top:30px;">Error loading products. Please try again later.</p>');
+  }
+}
 
 function renderProducts(list) {
   $('#productGrid').html(list.map(product => `
@@ -59,7 +78,7 @@ function renderOrder() {
 
 // Product click
 $(document).on('click', '.product-card', function() {
-  const id = Number($(this).data('id'));
+  const id = $(this).data('id');
   const product = products.find(p => p.id === id);
   const existing = order.find(item => item.id === id);
   if (existing) {
@@ -73,7 +92,7 @@ $(document).on('click', '.product-card', function() {
 // Quantity buttons
 $(document).on('click', '.qty-btn', function() {
   const action = $(this).data('action');
-  const id = Number($(this).closest('.order-item').data('id'));
+  const id = $(this).closest('.order-item').data('id');
   const item = order.find(i => i.id === id);
   if (action === 'inc') item.qty++;
   if (action === 'dec' && item.qty > 1) item.qty--;
@@ -82,7 +101,7 @@ $(document).on('click', '.qty-btn', function() {
 
 // Remove item
 $(document).on('click', '.remove-btn', function() {
-  const id = Number($(this).closest('.order-item').data('id'));
+  const id = $(this).closest('.order-item').data('id');
   order = order.filter(i => i.id !== id);
   renderOrder();
 });
@@ -114,6 +133,6 @@ $('.order-actions .proceed').on('click', function() {
   alert('Proceed to payment!');
 });
 
-// Initial render
-renderProducts(products);
+// Initial load
+fetchProducts();
 renderOrder(); 
