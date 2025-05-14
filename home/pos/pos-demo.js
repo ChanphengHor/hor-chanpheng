@@ -131,14 +131,15 @@ $('.order-actions .proceed').on('click', function() {
   alert('Proceed to payment!');
 });
 
-// Login modal logic
+// Login modal logic 동구
 $(function() {
   // If user is already logged in, skip login modal
   if (localStorage.getItem('posUser')) {
     $('#loginModal').hide();
-    $('.pos-container').show();
+    $('.pos-container').show().removeClass('blur');
     $('body').removeClass('login-bg');
   } else {
+    $('.pos-container').show().addClass('blur');
     $('#loginModal').show();
   }
 
@@ -148,7 +149,7 @@ $(function() {
     if (user === 'admin' && pass === 'Qwer1234!') {
       localStorage.setItem('posUser', user);
       $('#loginModal').fadeOut(200, function() {
-        $('.pos-container').fadeIn(200);
+        $('.pos-container').removeClass('blur').fadeIn(200);
         $('body').removeClass('login-bg');
       });
     } else {
@@ -162,6 +163,7 @@ $(function() {
   // Logout handler
   $('.sidebar .icon[title="Logout"]').on('click', function() {
     localStorage.removeItem('posUser');
+    $('.pos-container').addClass('blur');
     $('#loginModal').fadeIn(200);
     $('body').addClass('login-bg');
     $('#loginUser').val('');
