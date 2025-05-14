@@ -9,6 +9,8 @@ body {
   display: flex;
   height: 100vh;
   background: #f7f7f7;
+  z-index: 0;
+  position: relative;
 }
 .sidebar {
   width: 70px;
@@ -361,6 +363,5 @@ body.login-bg {
 }
 .pos-container.blur {
   filter: blur(10px);
-  pointer-events: none;
   user-select: none;
 } 
