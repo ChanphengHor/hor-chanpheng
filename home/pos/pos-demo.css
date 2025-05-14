@@ -355,6 +355,6 @@ body.login-bg {
   font-size: 1em;
 }
 /* Remove previous login modal styles if needed */
-#loginModal .login-box, #loginModal .login-avatar, #loginModal .login-input-group, #loginModal .login-options, #loginBtn, #loginError {
+#loginModal .login-box, #loginModal .login-avatar, #loginModal .login-input-group, #loginModal .login-options {
   display: none !important;
 } 
