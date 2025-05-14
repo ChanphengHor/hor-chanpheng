@@ -67,35 +67,6 @@
       </div>
     </div>
   </div>
-  <script>
-    $(function() {
-      // Hide POS until login
-      $('.pos-container').hide();
-      $('#loginModal').show();
-      // Use FontAwesome for icons
-      if (!document.getElementById('fa-login')) {
-        var fa = document.createElement('link');
-        fa.rel = 'stylesheet';
-        fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
-        fa.id = 'fa-login';
-        document.head.appendChild(fa);
-      }
-      $('#loginBtn').on('click', function() {
-        const user = $('#loginUser').val();
-        const pass = $('#loginPass').val();
-        if (user === 'admin' && pass === 'Qwer1234!') {
-          $('#loginModal').fadeOut(200, function() {
-            $('.pos-container').fadeIn(200);
-            $('body').removeClass('login-bg');
-          });
-        } else {
-          $('#loginError').text('Invalid username or password.');
-        }
-      });
-      $('#loginPass').on('keypress', function(e) {
-        if (e.which === 13) $('#loginBtn').click();
-      });
-    });
-  </script>
+  <script src="/pos/pos-demo.js"></script>
 </body>
 </html> 
