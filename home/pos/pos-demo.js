@@ -516,23 +516,38 @@ function showSearchResultsTab() {
     $('.menu-tabs').data('originalTabs', $('.menu-tabs').html());
   }
   
-  // Fade out existing tabs and fade in search results tab
-  $('.menu-tabs').fadeOut(150, function() {
-    $(this).html('<div class="tab search-results active">Search Results</div>');
-    $(this).fadeIn(150);
-  });
+  // If search results tab doesn't exist yet, create it
+  if ($('.menu-tabs .tab.search-results').length === 0) {
+    // First create the search results tab but keep it hidden
+    const $searchTab = $('<div class="tab search-results active">Search Results</div>').css({
+      'position': 'relative',
+      'left': '-20px',
+      'opacity': '0'
+    });
+    
+    // Prepend it to the menu tabs (before the "All" tab)
+    $('.menu-tabs').prepend($searchTab);
+    
+    // Animate it sliding in from left
+    $searchTab.animate({
+      'left': '0',
+      'opacity': '1'
+    }, 250, 'swing');
+  }
 }
 
 // Function to hide "Search Results" tab and show regular tabs
 function hideSearchResultsTab() {
-  // Get the original tabs
-  const originalTabs = $('.menu-tabs').data('originalTabs');
+  const $searchTab = $('.menu-tabs .tab.search-results');
   
-  // If we have original tabs, restore them
-  if (originalTabs) {
-    $('.menu-tabs').fadeOut(150, function() {
-      $(this).html(originalTabs);
-      $(this).fadeIn(150);
+  // If search tab exists, animate it sliding out
+  if ($searchTab.length) {
+    $searchTab.animate({
+      'left': '-20px',
+      'opacity': '0'
+    }, 250, 'swing', function() {
+      // After animation completes, remove the search tab
+      $(this).remove();
     });
   }
 }

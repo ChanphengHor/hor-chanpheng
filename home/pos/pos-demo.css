@@ -215,6 +215,8 @@ body {
   gap: 10px;
   padding: 18px 30px 0 30px;
   background: #fff;
+  position: relative;
+  overflow: hidden;
 }
 .menu-tabs .tab {
   padding: 7px 18px;
@@ -225,6 +227,8 @@ body {
   cursor: pointer;
   margin-bottom: 10px;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  position: relative;
 }
 .menu-tabs .tab.active {
   background: #ff9800;
@@ -236,6 +240,8 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  z-index: 5;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .menu-tabs .tab.search-results::before {
   content: "🔍";
