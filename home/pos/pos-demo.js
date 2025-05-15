@@ -176,6 +176,43 @@ function applyRoleBasedAccess(user) {
 
 // Sidebar icon click
 $(document).on('click', '.sidebar .icon', function() {
+  // First check if the user is logged in
+  try {
+    const posUserStr = localStorage.getItem('posUser');
+    if (!posUserStr) {
+      console.log('Security check: User not logged in but trying to access sidebar functions.');
+      $('.pos-container').addClass('blur');
+      $('#loginModal').fadeIn(200);
+      $('body').addClass('login-bg');
+      return;
+    }
+    
+    // Verify user permissions
+    const posUser = JSON.parse(posUserStr);
+    const title = $(this).attr('title');
+    
+    // Restricted sections based on role
+    if ((title === 'Products' || title === 'Customers' || title === 'Settings') && posUser.role !== 'Admin') {
+      console.log('Security check: Unauthorized access attempt to ' + title);
+      alert('You do not have permission to access this section.');
+      return;
+    }
+    
+    if (title === 'Reports' && posUser.role !== 'Admin' && posUser.role !== 'Manager') {
+      console.log('Security check: Unauthorized access attempt to Reports');
+      alert('You do not have permission to access reports.');
+      return;
+    }
+  } catch (e) {
+    console.error('Security check error:', e);
+    // Show login modal if there's an error with user data
+    $('.pos-container').addClass('blur');
+    $('#loginModal').fadeIn(200);
+    $('body').addClass('login-bg');
+    return;
+  }
+  
+  // Proceed with normal sidebar functionality if permissions check passes
   $('.sidebar .icon').removeClass('active');
   $(this).addClass('active');
   const title = $(this).attr('title');
@@ -441,6 +478,46 @@ $('.order-actions .proceed').on('click', function() {
   alert('Proceed to payment!');
 });
 
+// Function to check login status
+function checkLoginStatus() {
+  try {
+    const posUser = localStorage.getItem('posUser');
+    
+    // If loginModal is not showing but user is not logged in
+    if ($('#loginModal').css('display') === 'none' && !posUser) {
+      console.log('Login check: User not logged in but login modal is hidden. Showing login modal.');
+      $('.pos-container').addClass('blur');
+      $('#loginModal').fadeIn(200);
+      $('body').addClass('login-bg');
+    }
+    
+    // If there is user data, validate it's proper JSON
+    if (posUser) {
+      try {
+        const userInfo = JSON.parse(posUser);
+        if (!userInfo || !userInfo.username || !userInfo.role) {
+          console.log('Login check: Invalid user data. Showing login modal.');
+          localStorage.removeItem('posUser');
+          $('.pos-container').addClass('blur');
+          $('#loginModal').fadeIn(200);
+          $('body').addClass('login-bg');
+        }
+      } catch (e) {
+        console.log('Login check: Invalid JSON in localStorage. Showing login modal.');
+        localStorage.removeItem('posUser');
+        $('.pos-container').addClass('blur');
+        $('#loginModal').fadeIn(200);
+        $('body').addClass('login-bg');
+      }
+    }
+  } catch (e) {
+    console.error('Error in login status check:', e);
+  }
+  
+  // Set timeout for next check (5 seconds)
+  setTimeout(checkLoginStatus, 5000);
+}
+
 // Call when app initializes
 $(document).ready(function() {
   // Initialize - fetch products on page load
@@ -484,6 +561,9 @@ $(document).ready(function() {
     $('.pos-container').show().addClass('blur');
     $('#loginModal').show();
   }
+  
+  // Start periodic login status check
+  setTimeout(checkLoginStatus, 5000);
 });
 
 // Login modal logic - defined once at global scope
@@ -635,9 +715,9 @@ function renderUserManagement() {
           <div class="form-group">
             <label for="userRole">Role</label>
             <select id="userRole" required>
-              <option value="Cashier">Cashier (Sale item)</option>
-              <option value="Manager">Manager (Seeing the report)</option>
-              <option value="Admin">Admin (Full control)</option>
+              <option value="Cashier">Cashier</option>
+              <option value="Manager">Manager</option>
+              <option value="Admin">Admin</option>
             </select>
           </div>
           <div class="form-group">
