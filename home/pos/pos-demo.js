@@ -473,15 +473,80 @@ $('#searchInput').on('input', function() {
   
   const searchTimeout = setTimeout(() => {
     if (val.length > 0) {
+      // Show "Search Results" tab and hide regular category tabs
+      showSearchResultsTab();
+      
       // Show filtered products
       renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
     } else {
+      // Show regular tabs and hide "Search Results" tab
+      hideSearchResultsTab();
+      
       // Show all products if search is cleared
       renderProducts(products);
     }
   }, 200); // Small delay for better performance
   
   $(this).data('searchTimeout', searchTimeout);
+});
+
+// Handle escape key press to close and clear search
+$('#searchInput').on('keydown', function(e) {
+  // Check if ESC key (key code 27)
+  if (e.keyCode === 27) {
+    e.preventDefault();
+    // Clear the input
+    $(this).val('');
+    // Hide the search box
+    $('.search.collapsible').removeClass('active');
+    $('#searchToggle').removeClass('active');
+    // Reset product display to show all products
+    renderProducts(products);
+    // Hide search results tab and show regular tabs
+    hideSearchResultsTab();
+    // Remove focus
+    $(this).blur();
+  }
+});
+
+// Function to show "Search Results" tab and hide regular tabs
+function showSearchResultsTab() {
+  // Store the original tabs if not already stored
+  if (!$('.menu-tabs').data('originalTabs')) {
+    $('.menu-tabs').data('originalTabs', $('.menu-tabs').html());
+  }
+  
+  // Fade out existing tabs and fade in search results tab
+  $('.menu-tabs').fadeOut(150, function() {
+    $(this).html('<div class="tab search-results active">Search Results</div>');
+    $(this).fadeIn(150);
+  });
+}
+
+// Function to hide "Search Results" tab and show regular tabs
+function hideSearchResultsTab() {
+  // Get the original tabs
+  const originalTabs = $('.menu-tabs').data('originalTabs');
+  
+  // If we have original tabs, restore them
+  if (originalTabs) {
+    $('.menu-tabs').fadeOut(150, function() {
+      $(this).html(originalTabs);
+      $(this).fadeIn(150);
+    });
+  }
+}
+
+// Clear search input when clear button is clicked
+$('#clearSearch').on('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const $input = $('#searchInput');
+  $input.val('').focus();
+  // Trigger input event to refresh search results
+  $input.trigger('input');
+  // Hide search results tab and show regular tabs
+  hideSearchResultsTab();
 });
 
 // Hold/Proceed buttons
@@ -598,16 +663,6 @@ $(document).ready(function() {
       $search.removeClass('active');
       $('#searchToggle').removeClass('active');
     }
-  });
-  
-  // Clear search input when clear button is clicked
-  $('#clearSearch').on('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    const $input = $('#searchInput');
-    $input.val('').focus();
-    // Trigger input event to refresh search results
-    $input.trigger('input');
   });
   
   // Handle login status
