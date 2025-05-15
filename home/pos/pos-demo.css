@@ -113,7 +113,7 @@ body {
 }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 22px;
   padding: 20px 30px 0 30px;
   flex: 1;
@@ -130,6 +130,9 @@ body {
   cursor: pointer;
   transition: box-shadow 0.2s, border 0.2s;
   border: 2px solid transparent;
+  max-width: 168px;
+  height: auto;
+  width: 100%;
 }
 .product-card:hover {
   border: 2px solid #ff9800;
@@ -142,6 +145,11 @@ body {
   object-fit: cover;
   margin-bottom: 10px;
   border: 2px solid #eee;
+  background: #f0f0f0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23aaaaaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 32px;
 }
 .product-card .name {
   font-weight: 600;
@@ -358,4 +366,223 @@ body {
 .pos-container.blur {
   filter: blur(10px);
   user-select: none;
+}
+
+/* Product Admin Panel */
+#productCrudPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f7f7f7;
+  overflow-y: auto;
+}
+
+.product-admin {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 30px 10px 30px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-header h2 {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #222;
+}
+
+.product-list-container {
+  flex: 1;
+  padding: 20px 30px;
+  overflow-y: auto;
+}
+
+.admin-btn {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-btn:hover {
+  background: #f57c00;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.product-table th, 
+.product-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.product-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+  color: #555;
+}
+
+.product-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #f0f0f0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23aaaaaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 24px;
+}
+
+.action-cell {
+  white-space: nowrap;
+}
+
+.edit-product, .delete-product {
+  padding: 6px 12px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.edit-product {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.delete-product {
+  background: #ffebee;
+  color: #e53935;
+}
+
+.edit-product:hover {
+  background: #e0e0e0;
+}
+
+.delete-product:hover {
+  background: #ffcdd2;
+}
+
+.loading-text, .empty-text, .error-text {
+  text-align: center;
+  padding: 20px 0;
+  color: #888;
+}
+
+.error-text {
+  color: #e53935;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 25px;
+  width: 500px;
+  max-width: 90%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.close-modal:hover {
+  color: #333;
+}
+
+#formTitle {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn, .submit-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cancel-btn {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.submit-btn {
+  background: #ff9800;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.submit-btn:hover {
+  background: #f57c00;
 } 
