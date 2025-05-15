@@ -27,6 +27,9 @@ async function fetchProducts() {
     const snapshot = await db.collection('products').get();
     products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     renderProducts(products);
+    
+    // Generate menu tabs from unique categories
+    renderMenuTabs();
   } catch (error) {
     console.error("Error fetching products:", error);
     $('#productGrid').html('<p style="color:#888;text-align:center;margin-top:30px;">Error loading products. Please try again later.</p>');
@@ -36,7 +39,7 @@ async function fetchProducts() {
 function renderProducts(list) {
   $('#productGrid').html(list.map(product => `
     <div class="product-card" data-id="${product.id}">
-      <img src="${product.img}" alt="${product.name}">
+      <img src="${product.img || ''}" alt="${product.name}" onerror="this.style.display='block'; this.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='">
       <div class="name">${product.name}</div>
       <div class="price">$${product.price.toFixed(2)}</div>
     </div>
@@ -108,14 +111,248 @@ $(document).on('click', '.remove-btn', function() {
 $(document).on('click', '.menu-tabs .tab', function() {
   $('.menu-tabs .tab').removeClass('active');
   $(this).addClass('active');
-  // For demo, just highlight tab
+  const category = $(this).data('category');
+  if (category === 'All') {
+    renderProducts(products);
+  } else {
+    const filtered = products.filter(product => product.category === category);
+    renderProducts(filtered);
+  }
 });
 
 // Sidebar icon click
 $(document).on('click', '.sidebar .icon', function() {
   $('.sidebar .icon').removeClass('active');
   $(this).addClass('active');
+  const title = $(this).attr('title');
+  
+  if (title === 'Products') {
+    $('.main-content').hide();
+    $('#productCrudPanel').show();
+    renderProductsAdmin();
+  } else {
+    $('.main-content').show();
+    $('#productCrudPanel').hide();
+    
+    // If Home is clicked, reset menu-tabs and fetch all products
+    if (title === 'Home') {
+      // Set "All" tab as active
+      $('.menu-tabs .tab').removeClass('active');
+      $('.menu-tabs .tab').each(function() {
+        if ($(this).text() === 'All') {
+          $(this).addClass('active');
+        }
+      });
+      fetchProducts();
+    }
+  }
 });
+
+// Function to render product admin panel
+function renderProductsAdmin() {
+  let html = `
+    <div class="product-admin">
+      <div class="admin-header">
+        <h2>Product Management</h2>
+        <button id="addProductBtn" class="admin-btn">+ Add Product</button>
+      </div>
+      <div class="product-list-container">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody">
+            <tr><td colspan="5" class="loading-text">Loading products...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="productFormModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="formTitle">Add Product</h3>
+        <form id="productForm">
+          <input type="hidden" id="productId">
+          <div class="form-group">
+            <label for="productName">Product Name</label>
+            <input type="text" id="productName" required>
+          </div>
+          <div class="form-group">
+            <label for="productPrice">Price</label>
+            <input type="number" id="productPrice" step="0.01" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="productCategory">Category</label>
+            <select id="productCategory" required>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Supper">Supper</option>
+              <option value="Deserts">Deserts</option>
+              <option value="Beverages">Beverages</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productImage">Image URL</label>
+            <input type="text" id="productImage" placeholder="https://example.com/image.jpg">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="cancel-btn">Cancel</button>
+            <button type="submit" class="submit-btn">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  
+  $('#productCrudPanel').html(html);
+  
+  // Load products from Firestore
+  loadProductsTable();
+  
+  // Set up event listeners
+  $('#addProductBtn').on('click', showAddProductForm);
+  $(document).on('click', '.edit-product', handleEditProduct);
+  $(document).on('click', '.delete-product', handleDeleteProduct);
+  $(document).on('click', '.close-modal, .cancel-btn', closeProductModal);
+  $('#productForm').on('submit', handleProductSubmit);
+}
+
+// Load products into table
+function loadProductsTable() {
+  db.collection('products').get().then(snapshot => {
+    if (snapshot.empty) {
+      $('#productTableBody').html('<tr><td colspan="5" class="empty-text">No products found</td></tr>');
+      return;
+    }
+    
+    let html = '';
+    snapshot.forEach(doc => {
+      const product = doc.data();
+      const id = doc.id;
+      html += `
+        <tr data-id="${id}">
+          <td><img src="${product.img || ''}" alt="${product.name}" class="product-thumb" onerror="this.style.display='block'; this.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='"></td>
+          <td>${product.name}</td>
+          <td>$${product.price.toFixed(2)}</td>
+          <td>${product.category || 'N/A'}</td>
+          <td class="action-cell">
+            <button class="edit-product" data-id="${id}">Edit</button>
+            <button class="delete-product" data-id="${id}">Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+    
+    $('#productTableBody').html(html);
+  }).catch(error => {
+    console.error("Error getting products: ", error);
+    $('#productTableBody').html('<tr><td colspan="5" class="error-text">Error loading products</td></tr>');
+  });
+}
+
+// Show add product form
+function showAddProductForm() {
+  $('#formTitle').text('Add Product');
+  $('#productId').val('');
+  $('#productForm')[0].reset();
+  $('#productFormModal').show();
+}
+
+// Handle edit product
+function handleEditProduct() {
+  const id = $(this).data('id');
+  $('#formTitle').text('Edit Product');
+  
+  db.collection('products').doc(id).get().then(doc => {
+    if (doc.exists) {
+      const product = doc.data();
+      $('#productId').val(id);
+      $('#productName').val(product.name);
+      $('#productPrice').val(product.price);
+      $('#productCategory').val(product.category || 'Starters');
+      $('#productImage').val(product.img || '');
+      $('#productFormModal').show();
+    } else {
+      alert('Product not found!');
+    }
+  }).catch(error => {
+    console.error("Error getting product: ", error);
+    alert('Error loading product');
+  });
+}
+
+// Handle delete product
+function handleDeleteProduct() {
+  if (confirm('Are you sure you want to delete this product?')) {
+    const id = $(this).data('id');
+    
+    db.collection('products').doc(id).delete()
+      .then(() => {
+        loadProductsTable();
+      })
+      .catch(error => {
+        console.error("Error deleting product: ", error);
+        alert('Error deleting product');
+      });
+  }
+}
+
+// Close product modal
+function closeProductModal() {
+  $('#productFormModal').hide();
+}
+
+// Handle product form submission
+function handleProductSubmit(e) {
+  e.preventDefault();
+  
+  const productData = {
+    name: $('#productName').val().trim(),
+    price: parseFloat($('#productPrice').val()),
+    category: $('#productCategory').val(),
+    img: $('#productImage').val().trim() || ''
+  };
+  
+  const id = $('#productId').val();
+  
+  if (id) {
+    // Update existing product
+    db.collection('products').doc(id).update(productData)
+      .then(() => {
+        closeProductModal();
+        loadProductsTable();
+        // Refresh the main product display if we're on the home tab
+        if (!$('.sidebar .icon[title="Products"]').hasClass('active')) {
+          fetchProducts();
+        }
+      })
+      .catch(error => {
+        console.error("Error updating product: ", error);
+        alert('Error updating product');
+      });
+  } else {
+    // Add new product
+    db.collection('products').add(productData)
+      .then(() => {
+        closeProductModal();
+        loadProductsTable();
+        // Refresh the main product display if we're on the home tab
+        if (!$('.sidebar .icon[title="Products"]').hasClass('active')) {
+          fetchProducts();
+        }
+      })
+      .catch(error => {
+        console.error("Error adding product: ", error);
+        alert('Error adding product');
+      });
+  }
+}
 
 // Search
 $('#searchInput').on('input', function() {
@@ -174,4 +411,55 @@ $(function() {
 
 // Initial load
 fetchProducts();
-renderOrder(); 
+renderOrder();
+
+// Add this new function to render menu tabs
+function renderMenuTabs() {
+  // Start with "All" tab
+  let tabsHtml = '<div class="tab active" data-category="All">All</div>';
+  
+  // Get unique categories from products
+  const categories = [...new Set(products.map(product => product.category))].filter(Boolean);
+  
+  // Add a tab for each category
+  categories.forEach(category => {
+    tabsHtml += `<div class="tab" data-category="${category}">${category}</div>`;
+  });
+  
+  // Update the menu tabs
+  $('.menu-tabs').html(tabsHtml);
+}
+
+$(document).ready(function() {
+  // Initialize - fetch products on page load
+  fetchProducts();
+  renderOrder();
+  
+  // Set Home icon as active by default
+  $('.sidebar .icon[title="Home"]').addClass('active');
+  
+  // Handle login status
+  if (localStorage.getItem('posUser')) {
+    $('#loginModal').hide();
+    $('.pos-container').show().removeClass('blur');
+    $('body').removeClass('login-bg');
+  } else {
+    $('.pos-container').show().addClass('blur');
+    $('#loginModal').show();
+  }
+  
+  // Login button event
+  $('#loginBtn').on('click', function() {
+    const user = $('#loginUser').val();
+    const pass = $('#loginPass').val();
+    if (user === 'admin' && pass === 'Qwer1234!') {
+      localStorage.setItem('posUser', user);
+      $('#loginModal').fadeOut(200, function() {
+        $('.pos-container').removeClass('blur').fadeIn(200);
+        $('body').removeClass('login-bg');
+      });
+    } else {
+      $('#loginError').text('Invalid username or password.');
+    }
+  });
+}); 
