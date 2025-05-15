@@ -441,21 +441,54 @@ $('.order-actions .proceed').on('click', function() {
   alert('Proceed to payment!');
 });
 
-// Login modal logic
-$(function() {
-  // If user is already logged in, skip login modal
+// Call when app initializes
+$(document).ready(function() {
+  // Initialize - fetch products on page load
+  fetchProducts();
+  renderOrder();
+  
+  // Set Home icon as active by default
+  $('.sidebar .icon[title="Home"]').addClass('active');
+  
+  // Check if there are users, create default if none
+  checkAndCreateDefaultAdmin();
+  
+  // Handle login status
   if (localStorage.getItem('posUser')) {
-    $('#loginModal').hide();
-    $('.pos-container').show().removeClass('blur');
-    $('body').removeClass('login-bg');
-    
-    // Apply role-based access control
-    applyRoleBasedAccess(JSON.parse(localStorage.getItem('posUser')));
+    try {
+      // Try to parse the stored value as JSON
+      const userInfo = JSON.parse(localStorage.getItem('posUser'));
+      
+      // Make sure it's a valid user object with required properties
+      if (userInfo && userInfo.username && userInfo.role) {
+        $('#loginModal').hide();
+        $('.pos-container').show().removeClass('blur');
+        $('body').removeClass('login-bg');
+        
+        // Apply role-based access control
+        applyRoleBasedAccess(userInfo);
+      } else {
+        // User info is not valid, clear it and show login
+        localStorage.removeItem('posUser');
+        $('.pos-container').show().addClass('blur');
+        $('#loginModal').show();
+      }
+    } catch (e) {
+      // JSON parsing failed, clear localStorage and show login
+      console.error('Invalid user data in localStorage:', e);
+      localStorage.removeItem('posUser');
+      $('.pos-container').show().addClass('blur');
+      $('#loginModal').show();
+    }
   } else {
     $('.pos-container').show().addClass('blur');
     $('#loginModal').show();
   }
+});
 
+// Login modal logic - defined once at global scope
+$(function() {
+  // Login button event
   $('#loginBtn').on('click', function() {
     const username = $('#loginUser').val().trim();
     const password = $('#loginPass').val().trim();
@@ -519,10 +552,6 @@ $(function() {
   });
 });
 
-// Initial load
-fetchProducts();
-renderOrder();
-
 // Add this new function to render menu tabs
 function renderMenuTabs() {
   // Start with "All" tab
@@ -564,47 +593,6 @@ function checkAndCreateDefaultAdmin() {
     console.error('Error checking users:', error);
   });
 }
-
-// Call when app initializes
-$(document).ready(function() {
-  // Initialize - fetch products on page load
-  fetchProducts();
-  renderOrder();
-  
-  // Set Home icon as active by default
-  $('.sidebar .icon[title="Home"]').addClass('active');
-  
-  // Check if there are users, create default if none
-  checkAndCreateDefaultAdmin();
-  
-  // Handle login status
-  if (localStorage.getItem('posUser')) {
-    $('#loginModal').hide();
-    $('.pos-container').show().removeClass('blur');
-    $('body').removeClass('login-bg');
-    
-    // Apply role-based access control
-    applyRoleBasedAccess(JSON.parse(localStorage.getItem('posUser')));
-  } else {
-    $('.pos-container').show().addClass('blur');
-    $('#loginModal').show();
-  }
-  
-  // Login button event
-  $('#loginBtn').on('click', function() {
-    const user = $('#loginUser').val();
-    const pass = $('#loginPass').val();
-    if (user === 'admin' && pass === 'Qwer1234!') {
-      localStorage.setItem('posUser', user);
-      $('#loginModal').fadeOut(200, function() {
-        $('.pos-container').removeClass('blur').fadeIn(200);
-        $('body').removeClass('login-bg');
-      });
-    } else {
-      $('#loginError').text('Invalid username or password.');
-    }
-  });
-});
 
 // Function to render user management panel
 function renderUserManagement() {
@@ -832,4 +820,8 @@ function handleUserSubmit(e) {
         alert('Error checking username');
       });
   }
-} 
+}
+
+// Initial load to ensure products are available
+fetchProducts();
+renderOrder(); 
