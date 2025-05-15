@@ -542,11 +542,11 @@ body {
   position: relative;
   background-color: #fff;
   margin: 10% auto;
-  padding: 25px;
-  width: 500px;
+  padding: 30px;
+  width: 450px;
   max-width: 90%;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .close-modal {
@@ -556,16 +556,19 @@ body {
   font-size: 24px;
   cursor: pointer;
   color: #aaa;
+  transition: color 0.2s;
 }
 
 .close-modal:hover {
   color: #333;
 }
 
-#formTitle {
+#formTitle, #userFormTitle {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   color: #333;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .form-group {
@@ -590,8 +593,8 @@ body {
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .cancel-btn, .submit-btn {
@@ -600,6 +603,8 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.2s;
 }
 
 .cancel-btn {
@@ -633,6 +638,28 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+/* User form styles */
+#userForm .form-group input,
+#userForm .form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#userForm .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+#userForm .form-group {
+  margin-bottom: 16px;
 }
 
 .user-list-container {
