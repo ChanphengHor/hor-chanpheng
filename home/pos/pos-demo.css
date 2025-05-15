@@ -640,9 +640,11 @@ body {
   flex: 1;
 }
 
-/* User form styles */
+/* Form styling for both user and product forms */
 #userForm .form-group input,
-#userForm .form-group select {
+#userForm .form-group select,
+#productForm .form-group input,
+#productForm .form-group select {
   width: 100%;
   box-sizing: border-box;
   height: 40px;
@@ -652,13 +654,15 @@ body {
   font-size: 14px;
 }
 
-#userForm .form-group label {
+#userForm .form-group label,
+#productForm .form-group label {
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
 }
 
-#userForm .form-group {
+#userForm .form-group,
+#productForm .form-group {
   margin-bottom: 16px;
 }
 
