@@ -91,6 +91,32 @@ body {
 .topbar .select-table:hover {
   background: #ffa733;
 }
+.user-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+.user-indicator .role {
+  background-color: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.user-indicator .role.admin {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+.user-indicator .role.manager {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+.user-indicator .role.cashier {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
 .menu-tabs {
   display: flex;
   gap: 10px;

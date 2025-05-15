@@ -120,6 +120,60 @@ $(document).on('click', '.menu-tabs .tab', function() {
   }
 });
 
+// Function to update the user indicator
+function updateUserIndicator(user) {
+  if (!user) {
+    $('#userIndicator').html('');
+    return;
+  }
+  
+  let roleClass = '';
+  switch(user.role.toLowerCase()) {
+    case 'admin': roleClass = 'admin'; break;
+    case 'manager': roleClass = 'manager'; break;
+    case 'cashier': roleClass = 'cashier'; break;
+  }
+  
+  $('#userIndicator').html(`
+    <span class="username">${user.username}</span>
+    <span class="role ${roleClass}">${user.role}</span>
+  `);
+}
+
+// Function to apply role-based access control
+function applyRoleBasedAccess(user) {
+  // Update user indicator
+  updateUserIndicator(user);
+
+  // Hide all restricted sections first
+  $('.sidebar .icon[title="Products"]').hide();
+  $('.sidebar .icon[title="Reports"]').hide();
+  $('.sidebar .icon[title="Settings"]').hide();
+  $('.sidebar .icon[title="Customers"]').hide();
+  
+  // Always show these icons for all users
+  $('.sidebar .icon[title="Home"]').show();
+  $('.sidebar .icon[title="Logout"]').show();
+  
+  // Apply permissions based on role
+  switch(user.role) {
+    case 'Admin':
+      // Admin has full access
+      $('.sidebar .icon[title="Products"]').show();
+      $('.sidebar .icon[title="Reports"]').show();
+      $('.sidebar .icon[title="Settings"]').show();
+      $('.sidebar .icon[title="Customers"]').show();
+      break;
+    case 'Manager':
+      // Manager can see reports
+      $('.sidebar .icon[title="Reports"]').show();
+      break;
+    case 'Cashier':
+      // Cashier only has access to sales (which is default)
+      break;
+  }
+}
+
 // Sidebar icon click
 $(document).on('click', '.sidebar .icon', function() {
   $('.sidebar .icon').removeClass('active');
@@ -136,6 +190,18 @@ $(document).on('click', '.sidebar .icon', function() {
     $('#productCrudPanel').hide();
     $('#userManagementPanel').show();
     renderUserManagement();
+  } else if (title === 'Logout') {
+    // Handle logout
+    localStorage.removeItem('posUser');
+    $('.pos-container').addClass('blur');
+    $('#loginModal').fadeIn(200);
+    $('body').addClass('login-bg');
+    $('#loginUser').val('');
+    $('#loginPass').val('');
+    $('#loginError').text('');
+    // Clear user indicator
+    updateUserIndicator(null);
+    return; // Return early to avoid other actions
   } else {
     $('.main-content').show();
     $('#productCrudPanel').hide();
@@ -391,8 +457,18 @@ $(function() {
   }
 
   $('#loginBtn').on('click', function() {
-    const username = $('#loginUser').val();
-    const password = $('#loginPass').val();
+    const username = $('#loginUser').val().trim();
+    const password = $('#loginPass').val().trim();
+    
+    // Validation
+    if (!username || !password) {
+      $('#loginError').text('Please enter both username and password.');
+      return;
+    }
+    
+    // Show loading state
+    $('#loginBtn').prop('disabled', true).text('Logging in...');
+    $('#loginError').text('');
     
     // Check against Firestore users collection
     db.collection('users')
@@ -401,7 +477,8 @@ $(function() {
       .get()
       .then(snapshot => {
         if (snapshot.empty) {
-          $('#loginError').text('Invalid username or password.');
+          $('#loginError').text('User not found or inactive.');
+          $('#loginBtn').prop('disabled', false).text('Login');
           return;
         }
         
@@ -426,57 +503,21 @@ $(function() {
           // Apply role-based access restrictions
           applyRoleBasedAccess(userInfo);
         } else {
-          $('#loginError').text('Invalid username or password.');
+          $('#loginError').text('Invalid password.');
+          $('#loginBtn').prop('disabled', false).text('Login');
         }
       })
       .catch(error => {
         console.error("Error during login:", error);
-        $('#loginError').text('An error occurred during login.');
+        $('#loginError').text('An error occurred during login. Please try again.');
+        $('#loginBtn').prop('disabled', false).text('Login');
       });
   });
   
   $('#loginPass').on('keypress', function(e) {
     if (e.which === 13) $('#loginBtn').click();
   });
-
-  // Logout handler
-  $('.sidebar .icon[title="Logout"]').on('click', function() {
-    localStorage.removeItem('posUser');
-    $('.pos-container').addClass('blur');
-    $('#loginModal').fadeIn(200);
-    $('body').addClass('login-bg');
-    $('#loginUser').val('');
-    $('#loginPass').val('');
-    $('#loginError').text('');
-  });
 });
-
-// Function to apply role-based access control
-function applyRoleBasedAccess(user) {
-  // Hide all restricted sections first
-  $('.sidebar .icon[title="Products"]').hide();
-  $('.sidebar .icon[title="Reports"]').hide();
-  $('.sidebar .icon[title="Settings"]').hide();
-  $('.sidebar .icon[title="Customers"]').hide();
-  
-  // Apply permissions based on role
-  switch(user.role) {
-    case 'Admin':
-      // Admin has full access
-      $('.sidebar .icon[title="Products"]').show();
-      $('.sidebar .icon[title="Reports"]').show();
-      $('.sidebar .icon[title="Settings"]').show();
-      $('.sidebar .icon[title="Customers"]').show();
-      break;
-    case 'Manager':
-      // Manager can see reports
-      $('.sidebar .icon[title="Reports"]').show();
-      break;
-    case 'Cashier':
-      // Cashier only has access to sales (which is default)
-      break;
-  }
-}
 
 // Initial load
 fetchProducts();
@@ -499,6 +540,32 @@ function renderMenuTabs() {
   $('.menu-tabs').html(tabsHtml);
 }
 
+// Check if there are any users in the database, if not create a default admin
+function checkAndCreateDefaultAdmin() {
+  db.collection('users').get().then(snapshot => {
+    if (snapshot.empty) {
+      // No users found, create default admin
+      const defaultAdmin = {
+        username: 'admin',
+        password: 'Qwer1234!',
+        role: 'Admin',
+        status: 'Active'
+      };
+      
+      db.collection('users').add(defaultAdmin)
+        .then(() => {
+          console.log('Default admin user created');
+        })
+        .catch(error => {
+          console.error('Error creating default admin:', error);
+        });
+    }
+  }).catch(error => {
+    console.error('Error checking users:', error);
+  });
+}
+
+// Call when app initializes
 $(document).ready(function() {
   // Initialize - fetch products on page load
   fetchProducts();
@@ -507,11 +574,17 @@ $(document).ready(function() {
   // Set Home icon as active by default
   $('.sidebar .icon[title="Home"]').addClass('active');
   
+  // Check if there are users, create default if none
+  checkAndCreateDefaultAdmin();
+  
   // Handle login status
   if (localStorage.getItem('posUser')) {
     $('#loginModal').hide();
     $('.pos-container').show().removeClass('blur');
     $('body').removeClass('login-bg');
+    
+    // Apply role-based access control
+    applyRoleBasedAccess(JSON.parse(localStorage.getItem('posUser')));
   } else {
     $('.pos-container').show().addClass('blur');
     $('#loginModal').show();
