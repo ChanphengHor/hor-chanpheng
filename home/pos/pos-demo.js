@@ -129,10 +129,17 @@ $(document).on('click', '.sidebar .icon', function() {
   if (title === 'Products') {
     $('.main-content').hide();
     $('#productCrudPanel').show();
+    $('#userManagementPanel').hide();
     renderProductsAdmin();
+  } else if (title === 'Customers') {
+    $('.main-content').hide();
+    $('#productCrudPanel').hide();
+    $('#userManagementPanel').show();
+    renderUserManagement();
   } else {
     $('.main-content').show();
     $('#productCrudPanel').hide();
+    $('#userManagementPanel').hide();
     
     // If Home is clicked, reset menu-tabs and fetch all products
     if (title === 'Home') {
@@ -368,31 +375,66 @@ $('.order-actions .proceed').on('click', function() {
   alert('Proceed to payment!');
 });
 
-// Login modal logic 동구
+// Login modal logic
 $(function() {
   // If user is already logged in, skip login modal
   if (localStorage.getItem('posUser')) {
     $('#loginModal').hide();
     $('.pos-container').show().removeClass('blur');
     $('body').removeClass('login-bg');
+    
+    // Apply role-based access control
+    applyRoleBasedAccess(JSON.parse(localStorage.getItem('posUser')));
   } else {
     $('.pos-container').show().addClass('blur');
     $('#loginModal').show();
   }
 
   $('#loginBtn').on('click', function() {
-    const user = $('#loginUser').val();
-    const pass = $('#loginPass').val();
-    if (user === 'admin' && pass === 'Qwer1234!') {
-      localStorage.setItem('posUser', user);
-      $('#loginModal').fadeOut(200, function() {
-        $('.pos-container').removeClass('blur').fadeIn(200);
-        $('body').removeClass('login-bg');
+    const username = $('#loginUser').val();
+    const password = $('#loginPass').val();
+    
+    // Check against Firestore users collection
+    db.collection('users')
+      .where('username', '==', username)
+      .where('status', '==', 'Active')
+      .get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          $('#loginError').text('Invalid username or password.');
+          return;
+        }
+        
+        const user = snapshot.docs[0].data();
+        
+        // Password validation
+        if (user.password === password) {
+          // Store user info in localStorage with role
+          const userInfo = {
+            username: user.username,
+            role: user.role,
+            id: snapshot.docs[0].id
+          };
+          
+          localStorage.setItem('posUser', JSON.stringify(userInfo));
+          
+          $('#loginModal').fadeOut(200, function() {
+            $('.pos-container').removeClass('blur').fadeIn(200);
+            $('body').removeClass('login-bg');
+          });
+          
+          // Apply role-based access restrictions
+          applyRoleBasedAccess(userInfo);
+        } else {
+          $('#loginError').text('Invalid username or password.');
+        }
+      })
+      .catch(error => {
+        console.error("Error during login:", error);
+        $('#loginError').text('An error occurred during login.');
       });
-    } else {
-      $('#loginError').text('Invalid username or password.');
-    }
   });
+  
   $('#loginPass').on('keypress', function(e) {
     if (e.which === 13) $('#loginBtn').click();
   });
@@ -408,6 +450,33 @@ $(function() {
     $('#loginError').text('');
   });
 });
+
+// Function to apply role-based access control
+function applyRoleBasedAccess(user) {
+  // Hide all restricted sections first
+  $('.sidebar .icon[title="Products"]').hide();
+  $('.sidebar .icon[title="Reports"]').hide();
+  $('.sidebar .icon[title="Settings"]').hide();
+  $('.sidebar .icon[title="Customers"]').hide();
+  
+  // Apply permissions based on role
+  switch(user.role) {
+    case 'Admin':
+      // Admin has full access
+      $('.sidebar .icon[title="Products"]').show();
+      $('.sidebar .icon[title="Reports"]').show();
+      $('.sidebar .icon[title="Settings"]').show();
+      $('.sidebar .icon[title="Customers"]').show();
+      break;
+    case 'Manager':
+      // Manager can see reports
+      $('.sidebar .icon[title="Reports"]').show();
+      break;
+    case 'Cashier':
+      // Cashier only has access to sales (which is default)
+      break;
+  }
+}
 
 // Initial load
 fetchProducts();
@@ -462,4 +531,232 @@ $(document).ready(function() {
       $('#loginError').text('Invalid username or password.');
     }
   });
-}); 
+});
+
+// Function to render user management panel
+function renderUserManagement() {
+  let html = `
+    <div class="user-admin">
+      <div class="admin-header">
+        <h2>User Management</h2>
+        <button id="addUserBtn" class="admin-btn">+ Add User</button>
+      </div>
+      <div class="user-list-container">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <tr><td colspan="4" class="loading-text">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="userFormModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="userFormTitle">Add User</h3>
+        <form id="userForm">
+          <input type="hidden" id="userId">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+          </div>
+          <div class="form-group">
+            <label for="userRole">Role</label>
+            <select id="userRole" required>
+              <option value="Cashier">Cashier (Sale item)</option>
+              <option value="Manager">Manager (Seeing the report)</option>
+              <option value="Admin">Admin (Full control)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="userStatus">Status</label>
+            <select id="userStatus" required>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="cancel-btn">Cancel</button>
+            <button type="submit" class="submit-btn">Save User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  
+  // Check if panel exists, if not create it
+  if ($('#userManagementPanel').length === 0) {
+    $('<div id="userManagementPanel" style="display:none;"></div>').insertAfter('#productCrudPanel');
+  }
+  
+  $('#userManagementPanel').html(html);
+  
+  // Load users from Firestore
+  loadUsersTable();
+  
+  // Set up event listeners
+  $('#addUserBtn').on('click', showAddUserForm);
+  $(document).on('click', '.edit-user', handleEditUser);
+  $(document).on('click', '.delete-user', handleDeleteUser);
+  $(document).on('click', '.close-modal, .cancel-btn', closeUserModal);
+  $('#userForm').on('submit', handleUserSubmit);
+}
+
+// Load users into table
+function loadUsersTable() {
+  db.collection('users').get().then(snapshot => {
+    if (snapshot.empty) {
+      $('#userTableBody').html('<tr><td colspan="4" class="empty-text">No users found</td></tr>');
+      return;
+    }
+    
+    let html = '';
+    snapshot.forEach(doc => {
+      const user = doc.data();
+      const id = doc.id;
+      html += `
+        <tr data-id="${id}">
+          <td>${user.username}</td>
+          <td>${user.role}</td>
+          <td><span class="status-badge ${user.status.toLowerCase()}">${user.status}</span></td>
+          <td class="action-cell">
+            <button class="edit-user" data-id="${id}">Edit</button>
+            <button class="delete-user" data-id="${id}">Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+    
+    $('#userTableBody').html(html);
+  }).catch(error => {
+    console.error("Error getting users: ", error);
+    $('#userTableBody').html('<tr><td colspan="4" class="error-text">Error loading users</td></tr>');
+  });
+}
+
+// Show add user form
+function showAddUserForm() {
+  $('#userFormTitle').text('Add User');
+  $('#userId').val('');
+  $('#userForm')[0].reset();
+  $('#userRole').val('Cashier'); // Default role
+  $('#userStatus').val('Active'); // Default status
+  $('#userFormModal').show();
+}
+
+// Handle edit user
+function handleEditUser() {
+  const id = $(this).data('id');
+  $('#userFormTitle').text('Edit User');
+  
+  db.collection('users').doc(id).get().then(doc => {
+    if (doc.exists) {
+      const user = doc.data();
+      $('#userId').val(id);
+      $('#username').val(user.username);
+      $('#password').val(''); // For security, don't show the password
+      $('#userRole').val(user.role);
+      $('#userStatus').val(user.status);
+      $('#userFormModal').show();
+    } else {
+      alert('User not found!');
+    }
+  }).catch(error => {
+    console.error("Error getting user: ", error);
+    alert('Error loading user');
+  });
+}
+
+// Handle delete user
+function handleDeleteUser() {
+  if (confirm('Are you sure you want to delete this user?')) {
+    const id = $(this).data('id');
+    
+    db.collection('users').doc(id).delete()
+      .then(() => {
+        loadUsersTable();
+      })
+      .catch(error => {
+        console.error("Error deleting user: ", error);
+        alert('Error deleting user');
+      });
+  }
+}
+
+// Close user modal
+function closeUserModal() {
+  $('#userFormModal').hide();
+}
+
+// Handle user form submission
+function handleUserSubmit(e) {
+  e.preventDefault();
+  
+  const userData = {
+    username: $('#username').val().trim(),
+    role: $('#userRole').val(),
+    status: $('#userStatus').val()
+  };
+  
+  // Only update password if provided (for editing existing users)
+  const password = $('#password').val().trim();
+  if (password) {
+    userData.password = password;
+  }
+  
+  const id = $('#userId').val();
+  
+  if (id) {
+    // Update existing user
+    db.collection('users').doc(id).update(userData)
+      .then(() => {
+        closeUserModal();
+        loadUsersTable();
+      })
+      .catch(error => {
+        console.error("Error updating user: ", error);
+        alert('Error updating user');
+      });
+  } else {
+    // Add new user - password is required for new users
+    if (!password) {
+      alert('Password is required');
+      return;
+    }
+    
+    // Check if username already exists
+    db.collection('users').where('username', '==', userData.username).get()
+      .then(snapshot => {
+        if (!snapshot.empty) {
+          alert('Username already exists');
+          return;
+        }
+        
+        // Add the new user with password
+        db.collection('users').add(userData)
+          .then(() => {
+            closeUserModal();
+            loadUsersTable();
+          })
+          .catch(error => {
+            console.error("Error adding user: ", error);
+            alert('Error adding user');
+          });
+      })
+      .catch(error => {
+        console.error("Error checking username: ", error);
+        alert('Error checking username');
+      });
+  }
+} 
