@@ -58,38 +58,68 @@ body {
   font-weight: 700;
   font-size: 1.3rem;
   letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.search-toggle {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.2s;
+  box-shadow: none;
+  outline: none;
+}
+.search-toggle:hover {
+  transform: scale(1.1);
+}
+.search-toggle:focus {
+  outline: none;
+}
+.topbar .search.collapsible {
+  position: absolute;
+  left: 0;
+  width: 36px;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+  z-index: 1;
+}
+.topbar .search.collapsible.active {
+  width: 300px;
 }
 .topbar .search {
-  flex: 1;
-  margin: 0 30px;
   position: relative;
 }
 .topbar .search input {
   width: 100%;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 8px 40px 8px 40px;
+  border-radius: 20px;
   border: 1px solid #eee;
-  font-size: 1rem;
+  font-size: 14px;
   background: #f7f7f7;
+  height: 36px;
+  box-sizing: border-box;
 }
 .topbar .actions {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.topbar .select-table {
-  background: #ff9800;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 18px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.2s;
-}
-.topbar .select-table:hover {
-  background: #ffa733;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .user-indicator {
   display: flex;
@@ -97,6 +127,8 @@ body {
   gap: 8px;
   font-size: 0.9rem;
   color: #555;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .user-indicator .role {
   background-color: #f0f0f0;
@@ -734,4 +766,29 @@ body {
 .status-badge.inactive {
   background-color: #ffebee;
   color: #e53935;
+}
+
+.clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #aaa;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s;
+  opacity: 0.7;
+}
+
+.clear-search:hover {
+  color: #666;
+  opacity: 1;
 } 

@@ -467,7 +467,13 @@ function handleProductSubmit(e) {
 // Search
 $('#searchInput').on('input', function() {
   const val = $(this).val().toLowerCase();
-  renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
+  if (val.length > 0) {
+    // Show filtered products
+    renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
+  } else {
+    // Show all products if search is cleared
+    renderProducts(products);
+  }
 });
 
 // Hold/Proceed buttons
@@ -529,6 +535,27 @@ $(document).ready(function() {
   
   // Check if there are users, create default if none
   checkAndCreateDefaultAdmin();
+  
+  // Handle search collapsible functionality
+  $('#searchToggle').on('click', function() {
+    $('.search.collapsible').addClass('active');
+    $('#searchInput').focus();
+  });
+  
+  $('#searchInput').on('blur', function() {
+    if ($(this).val().trim() === '') {
+      setTimeout(function() {
+        $('.search.collapsible').removeClass('active');
+      }, 200);
+    }
+  });
+  
+  // Clear search input when clear button is clicked
+  $('#clearSearch').on('click', function() {
+    $('#searchInput').val('').focus();
+    // Also trigger the search to show all products again
+    renderProducts(products);
+  });
   
   // Handle login status
   if (localStorage.getItem('posUser')) {

@@ -16,7 +16,6 @@
     <div class="sidebar">
       <div class="icon active" title="Home">🏠</div>
       <div class="icon" title="Customers">👤</div>
-      <div class="icon" title="Tables">🪑</div>
       <div class="icon" title="Cashier">💵</div>
       <div class="icon" title="Orders">🧾</div>
       <div class="icon" title="Products">🛒</div>
@@ -27,10 +26,15 @@
     <div class="main-content">
       <div class="topbar">
         <div class="logo">Pheng POS</div>
-        <div class="search"><input type="text" placeholder="Search products..." id="searchInput"></div>
+        <div class="search-container">
+          <button id="searchToggle" class="search-toggle">🔍</button>
+          <div class="search collapsible">
+            <input type="text" placeholder="Search products..." id="searchInput">
+            <button id="clearSearch" class="clear-search">×</button>
+          </div>
+        </div>
         <div class="actions">
           <div class="user-indicator" id="userIndicator"></div>
-          <button class="select-table">Select Table</button>
         </div>
       </div>
       <div class="menu-tabs">
