@@ -216,7 +216,8 @@ body {
   padding: 18px 30px 0 30px;
   background: #fff;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  min-height: 42px;
 }
 .menu-tabs .tab {
   padding: 7px 18px;
@@ -226,9 +227,10 @@ body {
   font-weight: 500;
   cursor: pointer;
   margin-bottom: 10px;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.3s ease;
   white-space: nowrap;
   position: relative;
+  user-select: none;
 }
 .menu-tabs .tab.active {
   background: #ff9800;
@@ -241,11 +243,16 @@ body {
   align-items: center;
   gap: 6px;
   z-index: 5;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 10px rgba(255, 152, 0, 0.2);
+  transform-origin: left center;
+  animation-fill-mode: forwards;
 }
 .menu-tabs .tab.search-results::before {
   content: "🔍";
   font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .product-grid {
   display: grid;

@@ -516,23 +516,35 @@ function showSearchResultsTab() {
     $('.menu-tabs').data('originalTabs', $('.menu-tabs').html());
   }
   
+  // Deactivate all other tabs
+  $('.menu-tabs .tab').removeClass('active');
+  
   // If search results tab doesn't exist yet, create it
   if ($('.menu-tabs .tab.search-results').length === 0) {
     // First create the search results tab but keep it hidden
     const $searchTab = $('<div class="tab search-results active">Search Results</div>').css({
       'position': 'relative',
-      'left': '-20px',
-      'opacity': '0'
+      'left': '-30px',
+      'opacity': '0',
+      'transform': 'scale(0.95)'
     });
     
     // Prepend it to the menu tabs (before the "All" tab)
     $('.menu-tabs').prepend($searchTab);
     
-    // Animate it sliding in from left
+    // Animate it sliding in from left with easing
     $searchTab.animate({
       'left': '0',
       'opacity': '1'
-    }, 250, 'swing');
+    }, {
+      duration: 300,
+      easing: 'easeOutQuad',
+      step: function(now, fx) {
+        if (fx.prop === "opacity") {
+          $(this).css('transform', `scale(${0.95 + (0.05 * now)})`);
+        }
+      }
+    });
   }
 }
 
@@ -542,14 +554,36 @@ function hideSearchResultsTab() {
   
   // If search tab exists, animate it sliding out
   if ($searchTab.length) {
+    // Reactivate the "All" tab
+    $('.menu-tabs .tab').first().next().addClass('active');
+    
     $searchTab.animate({
-      'left': '-20px',
+      'left': '-30px',
       'opacity': '0'
-    }, 250, 'swing', function() {
-      // After animation completes, remove the search tab
-      $(this).remove();
+    }, {
+      duration: 300,
+      easing: 'easeInQuad',
+      step: function(now, fx) {
+        if (fx.prop === "opacity") {
+          $(this).css('transform', `scale(${0.95 + (0.05 * now)})`);
+        }
+      },
+      complete: function() {
+        // After animation completes, remove the search tab
+        $(this).remove();
+      }
     });
   }
+}
+
+// Add jQuery easing if it doesn't exist
+if ($.easing.easeOutQuad === undefined) {
+  $.easing.easeOutQuad = function(x, t, b, c, d) {
+    return -c *(t/=d)*(t-2) + b;
+  };
+  $.easing.easeInQuad = function(x, t, b, c, d) {
+    return c*(t/=d)*t + b;
+  };
 }
 
 // Clear search input when clear button is clicked
