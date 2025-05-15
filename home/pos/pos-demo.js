@@ -464,16 +464,24 @@ function handleProductSubmit(e) {
   }
 }
 
-// Search
+// Search functionality
 $('#searchInput').on('input', function() {
-  const val = $(this).val().toLowerCase();
-  if (val.length > 0) {
-    // Show filtered products
-    renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
-  } else {
-    // Show all products if search is cleared
-    renderProducts(products);
-  }
+  const val = $(this).val().toLowerCase().trim();
+  
+  // Debounce search to improve performance
+  clearTimeout($(this).data('searchTimeout'));
+  
+  const searchTimeout = setTimeout(() => {
+    if (val.length > 0) {
+      // Show filtered products
+      renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
+    } else {
+      // Show all products if search is cleared
+      renderProducts(products);
+    }
+  }, 200); // Small delay for better performance
+  
+  $(this).data('searchTimeout', searchTimeout);
 });
 
 // Hold/Proceed buttons
@@ -537,24 +545,69 @@ $(document).ready(function() {
   checkAndCreateDefaultAdmin();
   
   // Handle search collapsible functionality
-  $('#searchToggle').on('click', function() {
-    $('.search.collapsible').addClass('active');
-    $('#searchInput').focus();
+  $('#searchToggle').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const $search = $('.search.collapsible');
+    $search.addClass('active');
+    $search.find('input').focus();
+    $(this).addClass('active');
   });
   
+  // Handle search focus
+  $('#searchInput').on('focus', function() {
+    $('.search.collapsible').addClass('active');
+    $('#searchToggle').addClass('active');
+  });
+  
+  // Handle search blur
   $('#searchInput').on('blur', function() {
     if ($(this).val().trim() === '') {
       setTimeout(function() {
         $('.search.collapsible').removeClass('active');
+        $('#searchToggle').removeClass('active');
       }, 200);
     }
   });
   
+  // Handle escape key press to close and clear search
+  $('#searchInput').on('keydown', function(e) {
+    // Check if ESC key (key code 27)
+    if (e.keyCode === 27) {
+      e.preventDefault();
+      // Clear the input
+      $(this).val('');
+      // Hide the search box
+      $('.search.collapsible').removeClass('active');
+      $('#searchToggle').removeClass('active');
+      // Reset product display to show all products
+      renderProducts(products);
+      // Remove focus
+      $(this).blur();
+    }
+  });
+  
+  // Handle document click to close search if clicked outside
+  $(document).on('click', function(e) {
+    const $search = $('.search.collapsible');
+    const $input = $('#searchInput');
+    
+    if (!$(e.target).closest('.search-container').length && 
+        $search.hasClass('active') && 
+        $input.val().trim() === '') {
+      $search.removeClass('active');
+      $('#searchToggle').removeClass('active');
+    }
+  });
+  
   // Clear search input when clear button is clicked
-  $('#clearSearch').on('click', function() {
-    $('#searchInput').val('').focus();
-    // Also trigger the search to show all products again
-    renderProducts(products);
+  $('#clearSearch').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const $input = $('#searchInput');
+    $input.val('').focus();
+    // Trigger input event to refresh search results
+    $input.trigger('input');
   });
   
   // Handle login status
