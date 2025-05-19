@@ -109,6 +109,28 @@ $(document).on('click', '.remove-btn', function() {
 
 // Menu tab click
 $(document).on('click', '.menu-tabs .tab', function() {
+  // Don't hide if clicking the search results tab itself
+  if ($(this).hasClass('search-results')) {
+    return;
+  }
+
+  // Hide search results tab and collapse search input
+  const $searchTab = $('.menu-tabs .tab.search-results');
+  const $search = $('.search.collapsible');
+  const $searchToggle = $('#searchToggle');
+  const $searchInput = $('#searchInput');
+
+  // Clear search input and collapse search
+  $searchInput.val('');
+  $search.removeClass('active');
+  $searchToggle.removeClass('active');
+
+  // If search results tab exists, remove it
+  if ($searchTab.length) {
+    $searchTab.remove();
+  }
+
+  // Update active tab and filter products
   $('.menu-tabs .tab').removeClass('active');
   $(this).addClass('active');
   const category = $(this).data('category');
@@ -468,19 +490,64 @@ function handleProductSubmit(e) {
 $('#searchInput').on('input', function() {
   const val = $(this).val().toLowerCase().trim();
   
+  // Ensure search is active and focused
+  $('.search.collapsible').addClass('active');
+  $('#searchToggle').addClass('active');
+  $(this).focus();
+  
   // Debounce search to improve performance
   clearTimeout($(this).data('searchTimeout'));
   
   const searchTimeout = setTimeout(() => {
     if (val.length > 0) {
-      // Show "Search Results" tab and hide regular category tabs
-      showSearchResultsTab();
+      // Add Search Results tab if it doesn't exist
+      if ($('.menu-tabs .tab.search-results').length === 0) {
+        const searchIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+        const $searchTab = $(`<div class="tab search-results">${searchIcon}Search Results</div>`).css({
+          'opacity': '0',
+          'transform': 'scale(0.95)',
+          'display': 'flex',
+          'align-items': 'center',
+          'color': '#fff',
+          'background': '#ff9800'
+        });
+        $('.menu-tabs').append($searchTab);
+        // Animate the new tab in
+        $searchTab.animate({
+          'opacity': '1'
+        }, {
+          duration: 200,
+          step: function(now) {
+            $(this).css('transform', `scale(${0.95 + (0.05 * now)})`);
+          },
+          complete: function() {
+            $(this).addClass('active');
+            // Remove active class from other tabs
+            $('.menu-tabs .tab:not(.search-results)').removeClass('active');
+          }
+        });
+      }
       
       // Show filtered products
       renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
     } else {
-      // Show regular tabs and hide "Search Results" tab
-      hideSearchResultsTab();
+      // Animate out and remove Search Results tab if it exists
+      const $searchTab = $('.menu-tabs .tab.search-results');
+      if ($searchTab.length) {
+        $searchTab.animate({
+          'opacity': '0'
+        }, {
+          duration: 200,
+          step: function(now) {
+            $(this).css('transform', `scale(${1 - (0.05 * (1 - now))})`);
+          },
+          complete: function() {
+            $(this).remove();
+            // Set All tab as active
+            $('.menu-tabs .tab[data-category="All"]').addClass('active');
+          }
+        });
+      }
       
       // Show all products if search is cleared
       renderProducts(products);
@@ -502,89 +569,27 @@ $('#searchInput').on('keydown', function(e) {
     $('#searchToggle').removeClass('active');
     // Reset product display to show all products
     renderProducts(products);
-    // Hide search results tab and show regular tabs
-    hideSearchResultsTab();
+    // Animate out and remove Search Results tab
+    const $searchTab = $('.menu-tabs .tab.search-results');
+    if ($searchTab.length) {
+      $searchTab.animate({
+        'opacity': '0'
+      }, {
+        duration: 200,
+        step: function(now) {
+          $(this).css('transform', `scale(${1 - (0.05 * (1 - now))})`);
+        },
+        complete: function() {
+          $(this).remove();
+          // Set All tab as active
+          $('.menu-tabs .tab[data-category="All"]').addClass('active');
+        }
+      });
+    }
     // Remove focus
     $(this).blur();
   }
 });
-
-// Function to show "Search Results" tab and hide regular tabs
-function showSearchResultsTab() {
-  // Store the original tabs if not already stored
-  if (!$('.menu-tabs').data('originalTabs')) {
-    $('.menu-tabs').data('originalTabs', $('.menu-tabs').html());
-  }
-  
-  // Deactivate all other tabs
-  $('.menu-tabs .tab').removeClass('active');
-  
-  // If search results tab doesn't exist yet, create it
-  if ($('.menu-tabs .tab.search-results').length === 0) {
-    // First create the search results tab but keep it hidden
-    const $searchTab = $('<div class="tab search-results active">Search Results</div>').css({
-      'position': 'relative',
-      'left': '-30px',
-      'opacity': '0',
-      'transform': 'scale(0.95)'
-    });
-    
-    // Prepend it to the menu tabs (before the "All" tab)
-    $('.menu-tabs').prepend($searchTab);
-    
-    // Animate it sliding in from left with easing
-    $searchTab.animate({
-      'left': '0',
-      'opacity': '1'
-    }, {
-      duration: 300,
-      easing: 'easeOutQuad',
-      step: function(now, fx) {
-        if (fx.prop === "opacity") {
-          $(this).css('transform', `scale(${0.95 + (0.05 * now)})`);
-        }
-      }
-    });
-  }
-}
-
-// Function to hide "Search Results" tab and show regular tabs
-function hideSearchResultsTab() {
-  const $searchTab = $('.menu-tabs .tab.search-results');
-  
-  // If search tab exists, animate it sliding out
-  if ($searchTab.length) {
-    // Reactivate the "All" tab
-    $('.menu-tabs .tab').first().next().addClass('active');
-    
-    $searchTab.animate({
-      'left': '-30px',
-      'opacity': '0'
-    }, {
-      duration: 300,
-      easing: 'easeInQuad',
-      step: function(now, fx) {
-        if (fx.prop === "opacity") {
-          $(this).css('transform', `scale(${0.95 + (0.05 * now)})`);
-        }
-      },
-      complete: function() {
-        // After animation completes, remove the search tab
-        $(this).remove();
-      }
-    });
-  }
-}
-
-// Add jQuery easing if it doesn't exist
-if ($.easing.easeOutQuad === undefined) {
-  $.easing.easeOutQuad = function(x, t, b, c, d) {
-    return -c *(t/=d)*(t-2) + b;
-  };
-  $.easing.easeInQuad = function(x, t, b, c, d) {
-    return c*(t/=d)*t + b;
-  };
-}
 
 // Clear search input when clear button is clicked
 $('#clearSearch').on('click', function(e) {
@@ -592,10 +597,25 @@ $('#clearSearch').on('click', function(e) {
   e.stopPropagation();
   const $input = $('#searchInput');
   $input.val('').focus();
+  // Animate out and remove Search Results tab
+  const $searchTab = $('.menu-tabs .tab.search-results');
+  if ($searchTab.length) {
+    $searchTab.animate({
+      'opacity': '0'
+    }, {
+      duration: 200,
+      step: function(now) {
+        $(this).css('transform', `scale(${1 - (0.05 * (1 - now))})`);
+      },
+      complete: function() {
+        $(this).remove();
+        // Set All tab as active
+        $('.menu-tabs .tab[data-category="All"]').addClass('active');
+      }
+    });
+  }
   // Trigger input event to refresh search results
   $input.trigger('input');
-  // Hide search results tab and show regular tabs
-  hideSearchResultsTab();
 });
 
 // Hold/Proceed buttons
@@ -658,6 +678,38 @@ $(document).ready(function() {
   // Check if there are users, create default if none
   checkAndCreateDefaultAdmin();
   
+  // Global keyboard event listener for search
+  $(document).on('keydown', function(e) {
+    // Ignore if user is typing in an input field or textarea
+    if ($(e.target).is('input, textarea')) {
+      return;
+    }
+    
+    // Ignore modifier keys and special keys
+    if (e.ctrlKey || e.altKey || e.metaKey || e.key === 'Escape' || e.key === 'Tab') {
+      return;
+    }
+    
+    // Ignore function keys and other special keys
+    if (e.key.length > 1) {
+      return;
+    }
+    
+    // Activate search and focus input
+    const $search = $('.search.collapsible');
+    const $input = $('#searchInput');
+    $search.addClass('active');
+    $('#searchToggle').addClass('active');
+    
+    // Prevent default behavior and add the typed character to the input
+    e.preventDefault();
+    $input.val(e.key);
+    $input.focus();
+    
+    // Trigger input event to update search results
+    $input.trigger('input');
+  });
+  
   // Handle search collapsible functionality
   $('#searchToggle').on('click', function(e) {
     e.preventDefault();
@@ -681,23 +733,6 @@ $(document).ready(function() {
         $('.search.collapsible').removeClass('active');
         $('#searchToggle').removeClass('active');
       }, 200);
-    }
-  });
-  
-  // Handle escape key press to close and clear search
-  $('#searchInput').on('keydown', function(e) {
-    // Check if ESC key (key code 27)
-    if (e.keyCode === 27) {
-      e.preventDefault();
-      // Clear the input
-      $(this).val('');
-      // Hide the search box
-      $('.search.collapsible').removeClass('active');
-      $('#searchToggle').removeClass('active');
-      // Reset product display to show all products
-      renderProducts(products);
-      // Remove focus
-      $(this).blur();
     }
   });
   

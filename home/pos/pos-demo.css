@@ -108,12 +108,10 @@ body {
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 2;
-  box-shadow: 0 0 0 rgba(0,0,0,0);
   border-radius: 20px;
 }
 .topbar .search.collapsible.active {
   width: 250px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 .topbar .search {
   position: relative;
@@ -246,13 +244,6 @@ body {
   box-shadow: 0 3px 10px rgba(255, 152, 0, 0.2);
   transform-origin: left center;
   animation-fill-mode: forwards;
-}
-.menu-tabs .tab.search-results::before {
-  content: "🔍";
-  font-size: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 .product-grid {
   display: grid;
