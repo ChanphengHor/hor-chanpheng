@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Firestore Demo</title>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 600px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      .form-group { margin-bottom: 15px; }
+      .form-group label { display: block; margin-bottom: 5px; }
+      .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+      button { background: #039be5; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+      button:hover { background: #0288d1; }
+      #dataList { margin-top: 20px; }
+      .data-item { background: #f5f5f5; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+      .nav { background: #333; padding: 10px; }
+      .nav a { color: white; text-decoration: none; margin-right: 20px; }
+      .nav a:hover { color: #ffa100; }
+      .page { display: none; }
+      .page.active { display: block; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav">
+      <a href="#/" data-page="home">Home</a>
+      <a href="#/about" data-page="about">About</a>
+      <a href="#/contact" data-page="contact">Contact</a>
+    </div>
+
+    <div id="message">
+      <!-- Home Page -->
+      <div id="home" class="page active">
+        <h2>Firestore Demo</h2>
+        <h1>Add and View Data</h1>
+        
+        <form id="dataForm">
+          <div class="form-group">
+            <label for="nameInput">Name:</label>
+            <input type="text" id="nameInput" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="messageInput">Message:</label>
+            <input type="text" id="messageInput" name="message" required>
+          </div>
+          <button type="submit">Add Data</button>
+        </form>
+
+        <div id="dataList">
+          <h3>Stored Data:</h3>
+          <!-- Data will be displayed here -->
+        </div>
+      </div>
+
+      <!-- About Page -->
+      <div id="about" class="page">
+        <h2>About Us</h2>
+        <h1>Welcome to Our Demo</h1>
+        <p>This is a simple demonstration of Firebase Firestore integration with client-side routing.</p>
+        <p>Features include:</p>
+        <ul>
+          <li>Real-time data updates</li>
+          <li>Client-side routing</li>
+          <li>Responsive design</li>
+          <li>Firebase integration</li>
+        </ul>
+      </div>
+
+      <!-- Contact Page -->
+      <div id="contact" class="page">
+        <h2>Contact Us</h2>
+        <h1>Get in Touch</h1>
+        <p>Feel free to reach out to us:</p>
+        <div class="form-group">
+          <label for="emailInput">Email:</label>
+          <input type="email" id="emailInput" placeholder="Your email">
+        </div>
+        <div class="form-group">
+          <label for="messageInput">Message:</label>
+          <textarea id="contactMessage" rows="4" placeholder="Your message"></textarea>
+        </div>
+        <button onclick="alert('Thank you for your message!')">Send Message</button>
+      </div>
+    </div>
+
+    <script>
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
+        authDomain: "hor-chanpheng.firebaseapp.com",
+        projectId: "hor-chanpheng",
+        storageBucket: "hor-chanpheng.appspot.com"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Router functionality
+      function router() {
+        const hash = window.location.hash || '#/';
+        const page = hash.split('/')[1] || 'home';
+        
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        
+        // Show the current page
+        const currentPage = document.getElementById(page);
+        if (currentPage) {
+          currentPage.classList.add('active');
+        }
+      }
+
+      // Listen for hash changes
+      window.addEventListener('hashchange', router);
+      window.addEventListener('load', router);
+
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Firestore
+        const db = firebase.firestore();
+        
+        // Enable offline persistence
+        db.enablePersistence()
+          .catch((err) => {
+            if (err.code === 'failed-precondition') {
+              console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+            } else if (err.code === 'unimplemented') {
+              console.log('The current browser does not support persistence.');
+            }
+          });
+
+        const dataForm = document.getElementById('dataForm');
+        const dataList = document.getElementById('dataList');
+
+        // Add data to Firestore
+        dataForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const nameInput = document.getElementById('nameInput');
+          const messageInput = document.getElementById('messageInput');
+
+          // Validate inputs
+          if (!nameInput.value.trim() || !messageInput.value.trim()) {
+            alert('Please fill in all fields');
+            return;
+          }
+
+          try {
+            await db.collection('messages').add({
+              name: nameInput.value.trim(),
+              message: messageInput.value.trim(),
+              timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Clear form
+            dataForm.reset();
+          } catch (error) {
+            console.error("Error adding document: ", error);
+            alert('Error adding message. Please try again.');
+          }
+        });
+
+        // Listen for real-time updates
+        db.collection('messages')
+          .orderBy('timestamp', 'desc')
+          .onSnapshot((snapshot) => {
+            dataList.innerHTML = '<h3>Stored Data:</h3>';
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              const div = document.createElement('div');
+              div.className = 'data-item';
+              div.innerHTML = `
+                <strong>${data.name || 'Anonymous'}</strong>
+                <p>${data.message || 'No message'}</p>
+                <small>${data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : 'Loading...'}</small>
+              `;
+              dataList.appendChild(div);
+            });
+          }, (error) => {
+            console.error("Error listening for updates: ", error);
+          });
+      });
+    </script>
+  </body>
+</html>

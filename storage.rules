@@ -1,0 +1,19 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow read access to all files
+    match /{allPaths=**} {
+      allow read;
+    }
+    
+    // Allow write access to cv-files folder
+    match /cv-files/{fileName} {
+      allow write: if request.resource.size < 5 * 1024 * 1024 
+                    && (request.resource.contentType.matches('image/.*') 
+                        || request.resource.contentType.matches('application/pdf')
+                        || request.resource.contentType.matches('application/msword')
+                        || request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*'));
+      allow delete;
+    }
+  }
+} 
