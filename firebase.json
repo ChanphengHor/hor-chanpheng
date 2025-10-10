@@ -12,10 +12,6 @@
       {
         "source": "/pos_system",
         "destination": "/pos/pos-demo.html"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
       }
     ],
     "errorPages": {

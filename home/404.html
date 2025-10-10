@@ -3,9 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404</title>
+  <title>404 - Page Not Found | Hor Chanpheng</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .error-code {
+      font-size: 8rem;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      line-height: 1;
+    }
+    
+    .error-message {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 20px 0;
+      opacity: 0.9;
+    }
+    
+    .error-description {
+      font-size: 1rem;
+      margin: 20px 0 40px 0;
+      opacity: 0.8;
+      max-width: 600px;
+    }
+    
+    .back-button {
+      display: inline-block;
+      padding: 12px 30px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .home-link {
+      margin-top: 20px;
+    }
+    
+    .home-link a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    
+    .home-link a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h1>404</h1>
+  <div class="error-container">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-message">Page Not Found</h2>
+    <p class="error-description">
+      Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+    </p>
+    <a href="/" class="back-button">Go Back Home</a>
+    <div class="home-link">
+      <a href="/">← Return to CV Portfolio</a>
+    </div>
+  </div>
 </body>
 </html> 
