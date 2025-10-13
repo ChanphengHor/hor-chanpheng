@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Data API Test</title>
+    <title>Firebase Functions API Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,15 +69,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>CV Data API Test</h1>
-        <p>Test the Cloud Function endpoint for fetching CV data from Firestore.</p>
+        <h1>Firebase Functions API Test</h1>
+        <p>Test the Cloud Function endpoints for fetching CV data and Product list from Firestore.</p>
         
         <div class="form-group">
             <label for="baseUrl">Base URL:</label>
-            <input type="text" id="baseUrl" value="https://us-central1-hor-chanpheng.cloudfunctions.net" placeholder="Your Firebase Functions URL">
+                    <input type="text" id="baseUrl" value="https://horchanpheng.web.app" placeholder="Your Firebase Hosting URL">
         </div>
         
         <button onclick="fetchCVData()">Fetch CV Data</button>
+        <button onclick="fetchProductList()">Fetch Product List</button>
         
         <div id="result" class="result" style="display: none;"></div>
     </div>
@@ -88,10 +89,45 @@
     <script>
         function fetchCVData() {
             const baseUrl = $('#baseUrl').val();
-            const url = `${baseUrl}/getCVData`;
+            const url = `${baseUrl}/api/cv`;
             
             // Show loading state
-            $('#result').show().removeClass('success error').addClass('result').text('Loading...');
+            $('#result').show().removeClass('success error').addClass('result').text('Loading CV Data...');
+            
+            // Make AJAX request with jQuery
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#result')
+                        .removeClass('error')
+                        .addClass('result success')
+                        .text(JSON.stringify(data, null, 2));
+                },
+                error: function(xhr, status, error) {
+                    let errorMessage = `Error ${xhr.status}: `;
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        errorMessage += JSON.stringify(errorData, null, 2);
+                    } catch (e) {
+                        errorMessage += error;
+                    }
+                    
+                    $('#result')
+                        .removeClass('success')
+                        .addClass('result error')
+                        .text(errorMessage);
+                }
+            });
+        }
+
+        function fetchProductList() {
+            const baseUrl = $('#baseUrl').val();
+            const url = `${baseUrl}/api/products`;
+            
+            // Show loading state
+            $('#result').show().removeClass('success error').addClass('result').text('Loading Product List...');
             
             // Make AJAX request with jQuery
             $.ajax({

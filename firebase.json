@@ -12,6 +12,14 @@
       {
         "source": "/pos_system",
         "destination": "/pos/pos-demo.html"
+      },
+      {
+        "source": "/api/cv",
+        "function": "getCVDataV2"
+      },
+      {
+        "source": "/api/products",
+        "function": "getProductListV2"
       }
     ],
     "errorPages": {
@@ -27,6 +35,7 @@
   },
   "functions": {
     "source": "functions",
-    "runtime": "nodejs22"
+    "runtime": "nodejs22",
+    "gen": 2
   }
 }
