@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Data Setup - Firestore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .config-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .config-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        .config-section p {
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CV Data Setup for Firestore</h1>
+        
+        <div class="config-section">
+            <h3>📋 Setup Instructions</h3>
+            <p><strong>Step 1:</strong> Update your Firebase configuration in <code>main.js</code></p>
+            <p><strong>Step 2:</strong> Replace the placeholder config with your actual Firebase project details</p>
+            <p><strong>Step 3:</strong> Click the button below to populate your Firestore database</p>
+            <p><strong>Step 4:</strong> Visit your main CV page to see the data loaded from Firestore</p>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Populate Firestore Database</h2>
+            <p>This will add all CV data to your Firestore database. Make sure you have:</p>
+            <ul>
+                <li>Updated Firebase configuration in main.js</li>
+                <li>Firestore enabled in your Firebase project</li>
+                <li>Proper security rules set up</li>
+            </ul>
+            <button id="populateBtn" onclick="populateData()">Populate Firestore with CV Data</button>
+            <button id="clearBtn" onclick="clearData()" style="background-color: #e74c3c;">Clear All CV Data</button>
+        </div>
+
+        <div class="section">
+            <h2>📊 Data Structure</h2>
+            <p>The CV data is organized into the following sections in Firestore:</p>
+            <ul>
+                <li><strong>personal:</strong> Name, title, and summary</li>
+                <li><strong>contact:</strong> Address, phone, email, website, LinkedIn</li>
+                <li><strong>education:</strong> Educational background</li>
+                <li><strong>development:</strong> Self-development activities</li>
+                <li><strong>experience:</strong> Work experience</li>
+                <li><strong>skills:</strong> Technical skills and tools</li>
+                <li><strong>additionalExperience:</strong> Additional work experience</li>
+                <li><strong>languages:</strong> Language proficiencies</li>
+                <li><strong>references:</strong> Professional references</li>
+            </ul>
+        </div>
+
+        <div id="status"></div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Firebase SDK v8 (compatible with traditional scripts) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBytee7Z81vumHMc9lz1ew0zE3RULpXzZg",
+            authDomain: "hor-chanpheng.firebaseapp.com",
+            projectId: "hor-chanpheng",
+            storageBucket: "hor-chanpheng.firebasestorage.app",
+            messagingSenderId: "13355815757",
+            appId: "1:13355815757:web:5c40af20beb8377a411d04",
+            measurementId: "G-T41TPB21LB"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Sample CV data structure
+        const sampleCVData = {
+            personal: {
+                name: "HOR CHANPHENG",
+                title: "Senior Android Developer (Team Lead)",
+                summary: "Lines of code can create high-quality mobile apps that make people's everyday lives easier. I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too."
+            },
+            contact: {
+                address: "Home No.6K Group 02, Street 149DT, Phnom Penh, Cambodia",
+                phone: "+855 17 56 48 28",
+                email: "chanpheng123@gmail.com",
+                website: "horchanpheng.web.app",
+                linkedin: "Hor Chanpheng"
+            },
+            education: [
+                {
+                    institution: "Korea Software HRD Center",
+                    degree: "Scholarship Student (I.T Expert)",
+                    location: "Phnom Penh / 2017 - 2018"
+                },
+                {
+                    institution: "Build Bright University",
+                    degree: "Bachelor Degree (I.T)",
+                    location: "Battambang / 2013 - 2017"
+                },
+                {
+                    institution: "Net Yang High School",
+                    degree: "High School Certificated",
+                    location: "Battambang / 2010 - 2013"
+                }
+            ],
+            development: [
+                "Korea Software HRD Center",
+                "Basic Course (Web Dev)",
+                "Advanced Course (Mobile Dev)",
+                "Overseas Training (South Korea)",
+                "Team Lead (Project Management)",
+                "Cross-Platform Management (iOS/AOS)",
+                "Company-Based Practical Skills"
+            ],
+            experience: [
+                {
+                    company: "비플페이 주식회사 | BeplePay Co.,Ltd.",
+                    position: "과장 | Team Lead",
+                    location: "Busan, South Korea | From 2023 to Present (3 Years Target)",
+                    description: "Responsible for leading the production of high-quality payment applications with over 1.99 million active users. Manage project implementation, feature planning, and task assignments with Korean development teams.",
+                    achievements: [
+                        "Led development of payment applications serving 1.99M+ users",
+                        "Managed cross-functional teams and project implementation",
+                        "Implemented advanced payment security features",
+                        "Coordinated with Korean development teams"
+                    ]
+                },
+                {
+                    company: "Webcash Group",
+                    position: "Trainee",
+                    location: "Seoul, South Korea | From 2019 to 2021 (2 Years)",
+                    description: "Completed a two-year professional training program focused on Android Development (Java, Kotlin) and project management skill development through overseas work experience.",
+                    achievements: [
+                        "Completed comprehensive Android development training",
+                        "Gained expertise in Java and Kotlin programming",
+                        "Developed project management skills",
+                        "Worked in international team environment"
+                    ]
+                },
+                {
+                    company: "KOSIGN Investment Co.,Ltd.",
+                    position: "Senior Android Developer",
+                    location: "Phnom Penh | From 2018 to 2023 (5 Years 2 Months)",
+                    description: "Started my career path in mobile Android development and advanced to managing projects, cross-platform mobile apps. Gained strong technical expertise, leadership experience, and delivered high-quality mobile apps.",
+                    achievements: [
+                        "Developed multiple Android applications",
+                        "Advanced to project management role",
+                        "Created cross-platform mobile solutions",
+                        "Delivered high-quality mobile applications"
+                    ]
+                }
+            ],
+            skills: [
+                {
+                    category: "Android Development",
+                    items: ["Java", "Kotlin", "Coroutine", "Compose"]
+                },
+                {
+                    category: "Flutter Development",
+                    items: ["getx", "bloc"]
+                },
+                {
+                    category: "Web Development",
+                    items: ["Spring Framework", "php", "Node.js", "JavaScript"]
+                },
+                {
+                    category: "UI/UX Design",
+                    items: ["AdobeXD", "Figma", "Zeplin"]
+                },
+                {
+                    category: "Swift (Researching)"
+                },
+                {
+                    category: "Git"
+                },
+                {
+                    category: "Firebase",
+                    items: ["Cloud Message", "Remote Config", "Secret Manager"]
+                },
+                {
+                    category: "Cursor AI"
+                },
+                {
+                    category: "ChatGPT"
+                }
+            ],
+            additionalExperience: {
+                title: "KNGO Organization / English & Computer Instructor",
+                duration: "From 2015 to 2017 (2 Years) / Battambang",
+                responsibilities: [
+                    "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs.",
+                    "Start with a new foundational experience and develop essential skills",
+                    "Explore and connect with people beyond my family and friends."
+                ]
+            },
+            languages: [
+                {
+                    name: "KHMER",
+                    proficiency: "Native Language"
+                },
+                {
+                    name: "ENGLISH",
+                    proficiency: "Good Writing, Good Reading, Good Listening & Speaking"
+                },
+                {
+                    name: "KOREAN (best)",
+                    proficiency: "Good Writing, Good Reading, Good Listening & Speaking"
+                }
+            ],
+            references: [
+                {
+                    name: "Mr. Chen Phirum",
+                    position: "Deputy General Manager",
+                    email: "myref@domain.com"
+                },
+                {
+                    name: "Mr. Chen Phirum",
+                    position: "Deputy General Manager",
+                    email: "myref@domain.com"
+                }
+            ]
+        };
+
+        function showStatus(message, type) {
+            type = type || 'info';
+            $('#status').html('<div class="status ' + type + '">' + message + '</div>');
+        }
+
+        function populateData() {
+            const $populateBtn = $('#populateBtn');
+            $populateBtn.prop('disabled', true).text('Populating...');
+
+            showStatus('Starting to populate Firestore with CV data...', 'info');
+            
+            // Add each section as a separate document
+            $.each(sampleCVData, function(sectionName, sectionData) {
+                db.collection('cv').add({
+                    section: sectionName,
+                    data: sectionData,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(function() {
+                    console.log('Added ' + sectionName + ' section to Firestore');
+                }).catch(function(error) {
+                    console.error('Error adding ' + sectionName + ':', error);
+                });
+            });
+            
+            showStatus('✅ Successfully populated Firestore with CV data! You can now visit your main CV page.', 'success');
+            $populateBtn.prop('disabled', false).text('Populate Firestore with CV Data');
+        }
+
+        function clearData() {
+            const $clearBtn = $('#clearBtn');
+            $clearBtn.prop('disabled', true).text('Clearing...');
+
+            showStatus('Clearing all CV data from Firestore...', 'info');
+            
+            db.collection('cv').get().then(function(querySnapshot) {
+                const deletePromises = [];
+                
+                querySnapshot.forEach(function(doc) {
+                    deletePromises.push(doc.ref.delete());
+                });
+                
+                Promise.all(deletePromises).then(function() {
+                    showStatus('✅ Successfully cleared all CV data from Firestore!', 'success');
+                });
+            }).catch(function(error) {
+                console.error('Error clearing Firestore:', error);
+                showStatus('❌ Error clearing Firestore: ' + error.message, 'error');
+            }).finally(function() {
+                $clearBtn.prop('disabled', false).text('Clear All CV Data');
+            });
+        }
+
+        // Make functions globally available
+        window.populateData = populateData;
+        window.clearData = clearData;
+    </script>
+</body>
+</html>

@@ -1,34 +1,29 @@
 {
   "hosting": {
     "target": "horchanpheng",
-    "public": "home",
+    "public": ".",
     "cleanUrls": true,
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "setup-cv-data.html"
     ],
     "rewrites": [
       {
-        "source": "/pos_system",
-        "destination": "/pos/pos-demo.html"
-      },
-      {
-        "source": "/api/cv",
-        "function": "getCVDataV2"
-      },
-      {
-        "source": "/api/products",
-        "function": "getProductListV2"
+        "source": "**",
+        "destination": "/index.html"
       }
     ],
     "errorPages": {
       "404": "/404.html"
     }
   },
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs22",
-    "gen": 2
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }
