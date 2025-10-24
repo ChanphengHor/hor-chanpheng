@@ -129,12 +129,68 @@ const sampleCVData = {
             ]
         },
         {
+            id: "experience",
+            title: "WORK EXPERIENCE",
+            column: "right",
+            page: 1,
+            type: "experience-list",
+            order: 2,
+            data: [
+                {
+                    company: "비플페이 주식회사 | BeplePay Co.,Ltd.",
+                    position: "과장 | Team Lead",
+                    location: "Busan, South Korea | From 2023 to Present (3 Years Target)",
+                    description: "Responsible for leading the production of high-quality payment applications with over 1.99 million active users. Manage project implementation, feature planning, and task assignments with Korean development teams.",
+                    achievements: [
+                        "Led development of payment applications serving 1.99M+ users",
+                        "Managed cross-functional teams and project implementation",
+                        "Implemented advanced payment security features",
+                        "Coordinated with Korean development teams"
+                    ]
+                },
+                {
+                    company: "Webcash Group",
+                    position: "Trainee",
+                    location: "Seoul, South Korea | From 2019 to 2021 (2 Years)",
+                    description: "Completed a two-year professional training program focused on Android Development (Java, Kotlin) and project management skill development through overseas work experience.",
+                    achievements: [
+                        "Completed comprehensive Android development training",
+                        "Gained expertise in Java and Kotlin programming",
+                        "Developed project management skills",
+                        "Worked in international team environment"
+                    ]
+                },
+                {
+                    company: "KOSIGN Investment Co.,Ltd.",
+                    position: "Senior Android Developer",
+                    location: "Phnom Penh | From 2018 to 2023 (5 Years 2 Months)",
+                    description: "Started my career path in mobile Android development and advanced to managing projects, cross-platform mobile apps. Gained strong technical expertise, leadership experience, and delivered high-quality mobile apps.",
+                    achievements: [
+                        "Developed multiple Android applications",
+                        "Advanced to project management role",
+                        "Created cross-platform mobile solutions",
+                        "Delivered high-quality mobile applications"
+                    ]
+                },
+                {
+                    company: "KNGO Organization",
+                    position: "English & Computer Instructor",
+                    location: "Battambang | From 2015 to 2017 (2 Years)",
+                    description: "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs.",
+                    achievements: [
+                        "Start with a new foundational experience and develop essential skills",
+                        "Explore and connect with people beyond my family and friends"
+                    ]
+                }
+            ]
+        },
+        {
             id: "skills",
             title: "SKILLS",
             column: "left",
-            page: 2,
+            page: 1,
             type: "skills-list",
-            order: 1,
+            order: 4,
             data: [
                 {
                     category: "Android Development",
@@ -171,29 +227,12 @@ const sampleCVData = {
             ]
         },
         {
-            id: "additional-experience",
-            title: "",
-            column: "right",
-            page: 2,
-            type: "timeline",
-            order: 1,
-            data: {
-                title: "KNGO Organization / English & Computer Instructor",
-                duration: "From 2015 to 2017 (2 Years) / Battambang",
-                responsibilities: [
-                    "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs.",
-                    "Start with a new foundational experience and develop essential skills",
-                    "Explore and connect with people beyond my family and friends."
-                ]
-            }
-        },
-        {
             id: "languages",
             title: "LANGUAGES",
             column: "right",
-            page: 2,
+            page: 1,
             type: "language-list",
-            order: 2,
+            order: 3,
             data: [
                 {
                     name: "KHMER",
@@ -213,9 +252,9 @@ const sampleCVData = {
             id: "references",
             title: "REFERENCES",
             column: "right",
-            page: 2,
+            page: 1,
             type: "reference-list",
-            order: 3,
+            order: 4,
             data: [
                 {
                     name: "Mr. Chen Phirum",
@@ -292,8 +331,6 @@ function renderDynamicCV(data) {
     // Clear existing sections
     $('#left-column-sections').empty();
     $('#right-column-sections').empty();
-    $('#left-column-sections-page2').empty();
-    $('#right-column-sections-page2').empty();
 
     // Sort sections by order
     const sections = data.sections || sampleCVData.sections;
@@ -321,8 +358,6 @@ function renderSection(section) {
 function getTargetContainer(section) {
     if (section.page === 1) {
         return section.column === 'left' ? $('#left-column-sections') : $('#right-column-sections');
-    } else if (section.page === 2) {
-        return section.column === 'left' ? $('#left-column-sections-page2') : $('#right-column-sections-page2');
     }
     return null;
 }
@@ -445,14 +480,9 @@ function createTimelineSection(section) {
     }).join('');
     
     return $('<div>').addClass('additional-experience-section').html(
-        '<div class="timeline-item">' +
-            '<div class="timeline-dot"></div>' +
-            '<div class="timeline-content">' +
-                '<h3>' + data.title + '</h3>' +
-                '<p class="duration">' + data.duration + '</p>' +
-                '<ul>' + responsibilitiesHtml + '</ul>' +
-            '</div>' +
-        '</div>'
+        '<h3>' + data.title + '</h3>' +
+        '<p class="duration"><i class="fas fa-map-marker-alt"></i> ' + data.duration + '</p>' +
+        '<ul>' + responsibilitiesHtml + '</ul>'
     );
 }
 

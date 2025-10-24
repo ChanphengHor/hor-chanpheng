@@ -15,7 +15,7 @@ body {
 /* CV Container */
 .cv-container {
     max-width: 210mm; /* A4 width */
-    margin: 20px auto;
+    margin: 0;
     background: white;
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
     display: flex;
@@ -39,6 +39,38 @@ body {
     display: flex;
     flex-direction: column;
     gap: 30px;
+}
+
+/* Dynamic Section Styling */
+.left-column > div,
+.right-column > div {
+    margin-bottom: 30px;
+}
+
+.left-column > div:last-child,
+.right-column > div:last-child {
+    margin-bottom: 0;
+}
+
+/* Dynamic Section Containers */
+#left-column-sections,
+#right-column-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Specific Section Styling for Dynamic Content */
+.contact-section,
+.education-section,
+.development-section,
+.skills-section,
+.summary-section,
+.experience-section,
+.additional-experience-section,
+.languages-section,
+.references-section {
+    margin-bottom: 0; /* Remove margin since we're using gap */
 }
 
 /* Right Column */
@@ -78,10 +110,12 @@ h2 {
 
 .left-column h2 {
     border-bottom-color: white;
+    margin-top: 0;
 }
 
 .right-column h2 {
     border-bottom-color: #2c3e50;
+    margin-top: 0;
 }
 
 /* Contact Section */
@@ -186,6 +220,11 @@ h2 {
     top: 0;
     color: #2c3e50;
     font-size: 12px;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .experience-header h3 {
@@ -223,12 +262,7 @@ h2 {
     padding-left: 15px;
 }
 
-.experience-achievements li:before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #2c3e50;
-}
+/* Experience achievements now use timeline dot style above */
 
 /* Skills Section */
 #skills-list {
@@ -269,57 +303,15 @@ h2 {
     color: white;
 }
 
-/* Additional Experience */
-.additional-experience-section {
-    margin-bottom: 30px;
-}
-
-.timeline-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-}
-
-.timeline-dot {
-    width: 12px;
-    height: 12px;
-    background-color: #2c3e50;
-    border-radius: 50%;
-    margin-top: 8px;
-    flex-shrink: 0;
-}
-
-.timeline-content h3 {
-    font-size: 18px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 5px;
-}
-
-.duration {
-    font-size: 14px;
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
-
-#additional-responsibilities {
-    list-style: none;
-    padding-left: 0;
-}
-
-#additional-responsibilities li {
-    margin-bottom: 8px;
-    font-size: 14px;
-    position: relative;
-    padding-left: 15px;
-}
-
-#additional-responsibilities li:before {
+/* Experience achievements bullet points - keep original style */
+.experience-achievements li:before {
     content: "•";
     position: absolute;
     left: 0;
     color: #2c3e50;
 }
+
+/* Timeline dot styling removed - now using experience-item style */
 
 /* Languages Section */
 .language-item {
@@ -372,7 +364,6 @@ h2 {
         page-break-after: avoid;
     }
 }
-
 @media screen and (max-width: 768px) {
     .cv-page {
         flex-direction: column;
@@ -385,7 +376,7 @@ h2 {
     }
     
     .cv-container {
-        margin: 10px;
+        margin: 0;
         max-width: none;
     }
 }
@@ -401,3 +392,4 @@ h2 {
         margin: 0;
     }
 }
+
