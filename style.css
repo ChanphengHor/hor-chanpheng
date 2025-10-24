@@ -213,21 +213,37 @@ h2 {
     margin-bottom: 30px;
 }
 
-/* Experience Section */
-.experience-item {
-    margin-bottom: 30px;
+/* Experience Section - Timeline Style */
+.experience-section {
     position: relative;
-    padding-left: 24px;
+    padding-left: 30px;
+}
+
+.experience-section:before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #2c3e50;
+}
+
+.experience-item {
+    margin-bottom: 40px;
+    position: relative;
+    padding-left: 20px;
 }
 
 .experience-item:before {
     content: "";
     position: absolute;
-    left: 0px;
-    top: 7.5px;
+    left: -25px;
+    top: 8px;
     width: 12px;
     height: 12px;
-    background-color: #2c3e50;
+    border: 2px solid #2c3e50;
+    background-color: white;
     border-radius: 50%;
 }
 
