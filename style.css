@@ -216,13 +216,12 @@ h2 {
 /* Experience Section - Timeline Style */
 .experience-section {
     position: relative;
-    padding-left: 30px;
 }
 
 .experience-section:before {
     content: "";
     position: absolute;
-    left: 15px;
+    left: 3px;
     top: 72px;
     bottom: 30px;
     width: 2px;
@@ -238,7 +237,7 @@ h2 {
 .experience-item:before {
     content: "";
     position: absolute;
-    left: -22px;
+    left: -4px;
     top: 5px;
     width: 12px;
     height: 12px;
