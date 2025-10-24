@@ -119,17 +119,22 @@
 
         <div class="section">
             <h2>📊 Data Structure</h2>
-            <p>The CV data is organized into the following sections in Firestore:</p>
+            <p>The CV data is now organized dynamically with sections that include:</p>
             <ul>
-                <li><strong>personal:</strong> Name, title, and summary</li>
-                <li><strong>contact:</strong> Address, phone, email, website, LinkedIn</li>
-                <li><strong>education:</strong> Educational background</li>
-                <li><strong>development:</strong> Self-development activities</li>
-                <li><strong>experience:</strong> Work experience</li>
-                <li><strong>skills:</strong> Technical skills and tools</li>
-                <li><strong>additionalExperience:</strong> Additional work experience</li>
-                <li><strong>languages:</strong> Language proficiencies</li>
-                <li><strong>references:</strong> Professional references</li>
+                <li><strong>sections:</strong> Array of section objects with metadata (id, title, column, page, type, order, data)</li>
+                <li><strong>personal:</strong> Name and title information</li>
+            </ul>
+            <p><strong>Section Types Supported:</strong></p>
+            <ul>
+                <li><strong>contact:</strong> Contact information with icons</li>
+                <li><strong>list:</strong> Education-style lists</li>
+                <li><strong>bullet-list:</strong> Bullet point lists</li>
+                <li><strong>text:</strong> Plain text sections</li>
+                <li><strong>experience-list:</strong> Work experience with achievements</li>
+                <li><strong>skills-list:</strong> Skills with categories and items</li>
+                <li><strong>timeline:</strong> Timeline-style sections</li>
+                <li><strong>language-list:</strong> Language proficiency</li>
+                <li><strong>reference-list:</strong> Professional references</li>
             </ul>
         </div>
 
@@ -161,151 +166,225 @@
 
         // Sample CV data structure
         const sampleCVData = {
+            sections: [
+                {
+                    id: "contact",
+                    title: "CONTACT ME",
+                    column: "left",
+                    page: 1,
+                    type: "contact",
+                    order: 1,
+                    data: {
+                        address: "Home No.6K Group 02, Street 149DT, Phnom Penh, Cambodia",
+                        phone: "+855 17 56 48 28",
+                        email: "chanpheng123@gmail.com",
+                        website: "horchanpheng.web.app",
+                        linkedin: "Hor Chanpheng"
+                    }
+                },
+                {
+                    id: "education",
+                    title: "EDUCATION",
+                    column: "left",
+                    page: 1,
+                    type: "list",
+                    order: 2,
+                    data: [
+                        {
+                            institution: "Korea Software HRD Center",
+                            degree: "Scholarship Student (I.T Expert)",
+                            location: "Phnom Penh / 2017 - 2018"
+                        },
+                        {
+                            institution: "Build Bright University",
+                            degree: "Bachelor Degree (I.T)",
+                            location: "Battambang / 2013 - 2017"
+                        },
+                        {
+                            institution: "Net Yang High School",
+                            degree: "High School Certificated",
+                            location: "Battambang / 2010 - 2013"
+                        }
+                    ]
+                },
+                {
+                    id: "development",
+                    title: "SELF DEVELOPMENT",
+                    column: "left",
+                    page: 1,
+                    type: "bullet-list",
+                    order: 3,
+                    data: [
+                        "Korea Software HRD Center",
+                        "Basic Course (Web Dev)",
+                        "Advanced Course (Mobile Dev)",
+                        "Overseas Training (South Korea)",
+                        "Team Lead (Project Management)",
+                        "Cross-Platform Management (iOS/AOS)",
+                        "Company-Based Practical Skills"
+                    ]
+                },
+                {
+                    id: "summary",
+                    title: "",
+                    column: "right",
+                    page: 1,
+                    type: "text",
+                    order: 1,
+                    data: "Lines of code can create high-quality mobile apps that make people's everyday lives easier. I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too."
+                },
+                {
+                    id: "experience",
+                    title: "WORK EXPERIENCE",
+                    column: "right",
+                    page: 1,
+                    type: "experience-list",
+                    order: 2,
+                    data: [
+                        {
+                            company: "비플페이 주식회사 | BeplePay Co.,Ltd.",
+                            position: "과장 | Team Lead",
+                            location: "Busan, South Korea | From 2023 to Present (3 Years Target)",
+                            description: "Responsible for leading the production of high-quality payment applications with over 1.99 million active users. Manage project implementation, feature planning, and task assignments with Korean development teams.",
+                            achievements: [
+                                "Led development of payment applications serving 1.99M+ users",
+                                "Managed cross-functional teams and project implementation",
+                                "Implemented advanced payment security features",
+                                "Coordinated with Korean development teams"
+                            ]
+                        },
+                        {
+                            company: "Webcash Group",
+                            position: "Trainee",
+                            location: "Seoul, South Korea | From 2019 to 2021 (2 Years)",
+                            description: "Completed a two-year professional training program focused on Android Development (Java, Kotlin) and project management skill development through overseas work experience.",
+                            achievements: [
+                                "Completed comprehensive Android development training",
+                                "Gained expertise in Java and Kotlin programming",
+                                "Developed project management skills",
+                                "Worked in international team environment"
+                            ]
+                        },
+                        {
+                            company: "KOSIGN Investment Co.,Ltd.",
+                            position: "Senior Android Developer",
+                            location: "Phnom Penh | From 2018 to 2023 (5 Years 2 Months)",
+                            description: "Started my career path in mobile Android development and advanced to managing projects, cross-platform mobile apps. Gained strong technical expertise, leadership experience, and delivered high-quality mobile apps.",
+                            achievements: [
+                                "Developed multiple Android applications",
+                                "Advanced to project management role",
+                                "Created cross-platform mobile solutions",
+                                "Delivered high-quality mobile applications"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: "skills",
+                    title: "SKILLS",
+                    column: "left",
+                    page: 2,
+                    type: "skills-list",
+                    order: 1,
+                    data: [
+                        {
+                            category: "Android Development",
+                            items: ["Java", "Kotlin", "Coroutine", "Compose"]
+                        },
+                        {
+                            category: "Flutter Development",
+                            items: ["getx", "bloc"]
+                        },
+                        {
+                            category: "Web Development",
+                            items: ["Spring Framework", "php", "Node.js", "JavaScript"]
+                        },
+                        {
+                            category: "UI/UX Design",
+                            items: ["AdobeXD", "Figma", "Zeplin"]
+                        },
+                        {
+                            category: "Swift (Researching)"
+                        },
+                        {
+                            category: "Git"
+                        },
+                        {
+                            category: "Firebase",
+                            items: ["Cloud Message", "Remote Config", "Secret Manager"]
+                        },
+                        {
+                            category: "Cursor AI"
+                        },
+                        {
+                            category: "ChatGPT"
+                        }
+                    ]
+                },
+                {
+                    id: "additional-experience",
+                    title: "",
+                    column: "right",
+                    page: 2,
+                    type: "timeline",
+                    order: 1,
+                    data: {
+                        title: "KNGO Organization / English & Computer Instructor",
+                        duration: "From 2015 to 2017 (2 Years) / Battambang",
+                        responsibilities: [
+                            "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs.",
+                            "Start with a new foundational experience and develop essential skills",
+                            "Explore and connect with people beyond my family and friends."
+                        ]
+                    }
+                },
+                {
+                    id: "languages",
+                    title: "LANGUAGES",
+                    column: "right",
+                    page: 2,
+                    type: "language-list",
+                    order: 2,
+                    data: [
+                        {
+                            name: "KHMER",
+                            proficiency: "Native Language"
+                        },
+                        {
+                            name: "ENGLISH",
+                            proficiency: "Good Writing, Good Reading, Good Listening & Speaking"
+                        },
+                        {
+                            name: "KOREAN (best)",
+                            proficiency: "Good Writing, Good Reading, Good Listening & Speaking"
+                        }
+                    ]
+                },
+                {
+                    id: "references",
+                    title: "REFERENCES",
+                    column: "right",
+                    page: 2,
+                    type: "reference-list",
+                    order: 3,
+                    data: [
+                        {
+                            name: "Mr. Chen Phirum",
+                            position: "Deputy General Manager",
+                            email: "myref@domain.com"
+                        },
+                        {
+                            name: "Mr. Chen Phirum",
+                            position: "Deputy General Manager",
+                            email: "myref@domain.com"
+                        }
+                    ]
+                }
+            ],
             personal: {
                 name: "HOR CHANPHENG",
-                title: "Senior Android Developer (Team Lead)",
-                summary: "Lines of code can create high-quality mobile apps that make people's everyday lives easier. I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too."
-            },
-            contact: {
-                address: "Home No.6K Group 02, Street 149DT, Phnom Penh, Cambodia",
-                phone: "+855 17 56 48 28",
-                email: "chanpheng123@gmail.com",
-                website: "horchanpheng.web.app",
-                linkedin: "Hor Chanpheng"
-            },
-            education: [
-                {
-                    institution: "Korea Software HRD Center",
-                    degree: "Scholarship Student (I.T Expert)",
-                    location: "Phnom Penh / 2017 - 2018"
-                },
-                {
-                    institution: "Build Bright University",
-                    degree: "Bachelor Degree (I.T)",
-                    location: "Battambang / 2013 - 2017"
-                },
-                {
-                    institution: "Net Yang High School",
-                    degree: "High School Certificated",
-                    location: "Battambang / 2010 - 2013"
-                }
-            ],
-            development: [
-                "Korea Software HRD Center",
-                "Basic Course (Web Dev)",
-                "Advanced Course (Mobile Dev)",
-                "Overseas Training (South Korea)",
-                "Team Lead (Project Management)",
-                "Cross-Platform Management (iOS/AOS)",
-                "Company-Based Practical Skills"
-            ],
-            experience: [
-                {
-                    company: "비플페이 주식회사 | BeplePay Co.,Ltd.",
-                    position: "과장 | Team Lead",
-                    location: "Busan, South Korea | From 2023 to Present (3 Years Target)",
-                    description: "Responsible for leading the production of high-quality payment applications with over 1.99 million active users. Manage project implementation, feature planning, and task assignments with Korean development teams.",
-                    achievements: [
-                        "Led development of payment applications serving 1.99M+ users",
-                        "Managed cross-functional teams and project implementation",
-                        "Implemented advanced payment security features",
-                        "Coordinated with Korean development teams"
-                    ]
-                },
-                {
-                    company: "Webcash Group",
-                    position: "Trainee",
-                    location: "Seoul, South Korea | From 2019 to 2021 (2 Years)",
-                    description: "Completed a two-year professional training program focused on Android Development (Java, Kotlin) and project management skill development through overseas work experience.",
-                    achievements: [
-                        "Completed comprehensive Android development training",
-                        "Gained expertise in Java and Kotlin programming",
-                        "Developed project management skills",
-                        "Worked in international team environment"
-                    ]
-                },
-                {
-                    company: "KOSIGN Investment Co.,Ltd.",
-                    position: "Senior Android Developer",
-                    location: "Phnom Penh | From 2018 to 2023 (5 Years 2 Months)",
-                    description: "Started my career path in mobile Android development and advanced to managing projects, cross-platform mobile apps. Gained strong technical expertise, leadership experience, and delivered high-quality mobile apps.",
-                    achievements: [
-                        "Developed multiple Android applications",
-                        "Advanced to project management role",
-                        "Created cross-platform mobile solutions",
-                        "Delivered high-quality mobile applications"
-                    ]
-                }
-            ],
-            skills: [
-                {
-                    category: "Android Development",
-                    items: ["Java", "Kotlin", "Coroutine", "Compose"]
-                },
-                {
-                    category: "Flutter Development",
-                    items: ["getx", "bloc"]
-                },
-                {
-                    category: "Web Development",
-                    items: ["Spring Framework", "php", "Node.js", "JavaScript"]
-                },
-                {
-                    category: "UI/UX Design",
-                    items: ["AdobeXD", "Figma", "Zeplin"]
-                },
-                {
-                    category: "Swift (Researching)"
-                },
-                {
-                    category: "Git"
-                },
-                {
-                    category: "Firebase",
-                    items: ["Cloud Message", "Remote Config", "Secret Manager"]
-                },
-                {
-                    category: "Cursor AI"
-                },
-                {
-                    category: "ChatGPT"
-                }
-            ],
-            additionalExperience: {
-                title: "KNGO Organization / English & Computer Instructor",
-                duration: "From 2015 to 2017 (2 Years) / Battambang",
-                responsibilities: [
-                    "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs.",
-                    "Start with a new foundational experience and develop essential skills",
-                    "Explore and connect with people beyond my family and friends."
-                ]
-            },
-            languages: [
-                {
-                    name: "KHMER",
-                    proficiency: "Native Language"
-                },
-                {
-                    name: "ENGLISH",
-                    proficiency: "Good Writing, Good Reading, Good Listening & Speaking"
-                },
-                {
-                    name: "KOREAN (best)",
-                    proficiency: "Good Writing, Good Reading, Good Listening & Speaking"
-                }
-            ],
-            references: [
-                {
-                    name: "Mr. Chen Phirum",
-                    position: "Deputy General Manager",
-                    email: "myref@domain.com"
-                },
-                {
-                    name: "Mr. Chen Phirum",
-                    position: "Deputy General Manager",
-                    email: "myref@domain.com"
-                }
-            ]
+                title: "Senior Android Developer (Team Lead)"
+            }
         };
 
         function showStatus(message, type) {
@@ -319,17 +398,24 @@
 
             showStatus('Starting to populate Firestore with CV data...', 'info');
             
-            // Add each section as a separate document
-            $.each(sampleCVData, function(sectionName, sectionData) {
-                db.collection('cv').add({
-                    section: sectionName,
-                    data: sectionData,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(function() {
-                    console.log('Added ' + sectionName + ' section to Firestore');
-                }).catch(function(error) {
-                    console.error('Error adding ' + sectionName + ':', error);
-                });
+            // Add sections data
+            db.collection('cv').doc('sections').set({
+                data: sampleCVData.sections,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(function() {
+                console.log('Added sections data to Firestore');
+            }).catch(function(error) {
+                console.error('Error adding sections:', error);
+            });
+            
+            // Add personal data
+            db.collection('cv').doc('personal').set({
+                data: sampleCVData.personal,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(function() {
+                console.log('Added personal data to Firestore');
+            }).catch(function(error) {
+                console.error('Error adding personal:', error);
             });
             
             showStatus('✅ Successfully populated Firestore with CV data! You can now visit your main CV page.', 'success');
