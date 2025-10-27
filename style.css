@@ -142,7 +142,7 @@ h2 {
 
 .contact-item svg {
     width: 20px;
-    margin-right: 10px;
+    margin-right: 5px;
     flex-shrink: 0;
 }
 
@@ -166,6 +166,11 @@ h2 {
 
 .education-item i {
     margin-right: 5px;
+}
+
+.education-item svg {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* Development Section */
