@@ -268,10 +268,18 @@ h2 {
     font-size: 14px;
     color: #2c3e50;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .experience-header i {
     margin-right: 5px;
+}
+
+.experience-header p svg {
+    flex-shrink: 0;
+    vertical-align: middle;
 }
 
 .experience-description {
