@@ -315,6 +315,9 @@ function populateFirestoreData() {
 
 // Function to load CV data from Firestore
 function loadCVData() {
+    // Show shimmer loading
+    $('#shimmer-loading').fadeIn(300);
+    
     db.collection('cv').get().then(function(querySnapshot) {
         const data = {};
         
@@ -323,11 +326,48 @@ function loadCVData() {
         });
 
         renderDynamicCV(data);
+        
+        // Hide shimmer and show content with fade
+        $('#shimmer-loading').fadeOut(500, function() {
+            $('#cv-content').addClass('loaded');
+            initializeLazyLoading();
+        });
+        
         console.log('CV data loaded successfully from Firestore');
     }).catch(function(error) {
         console.error('Error loading CV data:', error);
         // Fallback to sample data if Firestore fails
         renderDynamicCV(sampleCVData);
+        
+        // Hide shimmer and show content with fade
+        $('#shimmer-loading').fadeOut(500, function() {
+            $('#cv-content').addClass('loaded');
+            initializeLazyLoading();
+        });
+    });
+}
+
+// Intersection Observer for lazy loading fade-in
+function initializeLazyLoading() {
+    // Add fade-in class to all sections
+    $('.skills-section, .education-section, .development-section, .summary-section, .experience-section, .languages-section, .references-section, .contact-section').addClass('fade-in');
+    
+    // Create intersection observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observe all sections with fade-in class
+    document.querySelectorAll('.fade-in').forEach(section => {
+        observer.observe(section);
     });
 }
 

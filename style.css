@@ -16,6 +16,75 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    position: relative;
+}
+
+/* Shimmer Loading Animation */
+#shimmer-loading {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: white;
+}
+
+.shimmer-container {
+    max-width: 280mm;
+    margin: 0 auto;
+    padding: 50px;
+}
+
+.shimmer-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.shimmer-profile {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+.shimmer-section {
+    height: 200px;
+    margin-bottom: 30px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Fade-in Animation for Lazy Loading */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#cv-content {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+#cv-content.loaded {
+    opacity: 1;
 }
 
 /* CV Container */
@@ -301,7 +370,6 @@ h2 {
 }
 
 /* Experience achievements now use timeline dot style above */
-
 /* Experience achievements bullet points - keep original style */
 .experience-achievements li:before {
     content: "•";
