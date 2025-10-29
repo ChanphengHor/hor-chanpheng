@@ -508,15 +508,17 @@ function createLanguageListSection(section) {
 
 function createReferenceListSection(section) {
     let html = '<div class="references-section"><h2>' + section.title + '</h2>';
+    html += '<div class="reference-list">';
     $.each(section.data, function(index, ref) {
-        html += '<div class="reference-item">' +
-            '<h4><u>' + ref.name + '</u></h4>' +
-            '<p>' + ref.position + '</p>' +
-            '<p>Phone</p>' +
-            '<p>' + ref.email + '</p>' +
-            '</div>';
+        html += 
+            '<div class="reference-item">' +
+                '<h4><u>' + ref.name + '</u></h4>' +
+                '<p>' + ref.position + '</p>' +
+                '<p>Phone</p>' +
+                '<p>' + ref.email + '</p>' +
+                '</div> ';
     });
-    html += '</div>';
+    html += '</div></div>';
     return $(html);
 }
 

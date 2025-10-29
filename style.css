@@ -196,7 +196,7 @@ h2 {
 
 /* Header Section */
 .header-section {
-    margin-bottom: 20px;
+    margin-bottom: 0px !important;
 }
 
 #full-name {
@@ -302,45 +302,6 @@ h2 {
 
 /* Experience achievements now use timeline dot style above */
 
-/* Skills Section */
-#skills-list {
-    list-style: none;
-    padding-left: 0;
-}
-
-#skills-list li {
-    margin-bottom: 18px;
-    font-size: 17px;
-    color: white;
-}
-
-#skills-list li strong {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 17px;
-    color: white;
-}
-
-#skills-list li ul {
-    list-style: none;
-    padding-left: 20px;
-    margin-top: 5px;
-}
-
-#skills-list li ul li {
-    margin-bottom: 4px;
-    font-size: 15px;
-    position: relative;
-    color: white;
-}
-
-#skills-list li ul li:before {
-    content: "•";
-    position: absolute;
-    left: -15px;
-    color: white;
-}
-
 /* Experience achievements bullet points - keep original style */
 .experience-achievements li:before {
     content: "•";
@@ -360,6 +321,10 @@ h2 {
 
 .language-item strong {
     font-weight: bold;
+}
+
+.reference-list {
+    display: flex;
 }
 
 /* References Section */
@@ -383,6 +348,11 @@ h2 {
     font-size: 14px;
     margin-bottom: 3px;
     color: #2c3e50;
+}
+
+.development-section ul,
+.skills-section ul {
+    padding-left: 24px;
 }
 
 /* Responsive Design */
@@ -411,6 +381,10 @@ h2 {
     .left-column,
     .right-column {
         width: 100%;
+    }
+
+    .right-column {
+        padding: 24px;
     }
     
     .cv-container {
