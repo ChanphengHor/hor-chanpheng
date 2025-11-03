@@ -21,8 +21,24 @@ exports.sendPhengDashboardMessage = onRequest(
       const telegramToken = TELEGRAM_TOKEN.value();
       const channelId = CHANNEL_ID.value();
 
-      const { title = '', content = '' } = req.body || {};
-      const message = `📢 ${title}\n\n${content}`.trim();
+      // Only accept event type from client - message content is server-controlled
+      const { event } = req.body || {};
+      
+      // Define messages server-side to prevent client modification
+      const messages = {
+        cv_viewed: {
+          title: "Alert",
+          content: "Someone just viewed your CV!"
+        }
+      };
+
+      // Only process known events
+      if (!event || !messages[event]) {
+        return res.status(400).send('Invalid event type');
+      }
+
+      const messageData = messages[event];
+      const message = `📢 ${messageData.title}\n\n${messageData.content}`.trim();
 
       const resp = await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
         method: 'POST',

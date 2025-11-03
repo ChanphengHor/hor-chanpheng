@@ -578,15 +578,39 @@ $(document).ready(function() {
 });
 
 async function sendMessageToTelegram() {
+    // Check if we have a stored unique ID and if it's expired
+    const storageKey = 'cv_view_id';
+    const stored = localStorage.getItem(storageKey);
+    const now = Date.now();
+    const oneHours = 60 * 60 * 1000; // 1 hour in milliseconds
+    
+    if (stored) {
+        const { id, expiration } = JSON.parse(stored);
+        // If not expired, ignore sending message
+        if (now < expiration) {
+            return;
+        }
+    }
+    
+    // Generate unique ID
+    const uniqueId = Date.now().toString(36) + Math.random().toString(36).slice(2);
+    const expiration = now + oneHours;
+    
+    // Save to localStorage with expiration
+    localStorage.setItem(storageKey, JSON.stringify({
+        id: uniqueId,
+        expiration: expiration
+    }));
+    
     try {
+        // Only send event type - message content is handled server-side
         const response = await fetch("/sendmessage", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                title: "Alert",
-                content: "Someone just viewed your CV!"
+                event: "cv_viewed"
             })
         });
 
