@@ -316,7 +316,6 @@ function populateFirestoreData() {
 // Function to load CV data from Firestore
 function loadCVData() {
     // Show shimmer loading
-    $('#shimmer-loading').fadeIn(300);
     
     db.collection('cv').get().then(function(querySnapshot) {
         const data = {};
@@ -328,10 +327,12 @@ function loadCVData() {
         renderDynamicCV(data);
         
         // Hide shimmer and show content with fade
-        $('#shimmer-loading').fadeOut(500, function() {
-            $('#cv-content').addClass('loaded');
-            initializeLazyLoading();
-        });
+        // $('#shimmer-loading').fadeOut(500, function() {
+        //     $('#cv-content').addClass('loaded');
+        //     initializeLazyLoading();
+        // });
+        $('#cv-content').addClass('loaded');
+        initializeLazyLoading();
         
         console.log('CV data loaded successfully from Firestore');
     }).catch(function(error) {
