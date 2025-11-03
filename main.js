@@ -574,4 +574,28 @@ window.CVManager = {
 // Auto-load data when page loads
 $(document).ready(function() {
     loadCVData();
+    sendMessageToTelegram();
 });
+
+async function sendMessageToTelegram() {
+    try {
+        const response = await fetch("/sendmessage", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: "Alert",
+                content: "Someone just viewed your CV!"
+            })
+        });
+
+        if (!response.ok) {
+            console.log('Failed to send message!');
+        } else {
+            console.log('Message sent successfully!');
+        }
+    } catch (error) {
+        console.log('Failed to send message!');
+    }
+}
