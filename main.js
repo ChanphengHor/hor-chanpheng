@@ -12,6 +12,60 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
+
+// Helper function to get Firebase Storage download URL
+function getStorageUrl(filePath) {
+    const fileRef = storage.ref(filePath);
+    return fileRef.getDownloadURL()
+        .then(function(url) {
+            console.log('File URL:', url);
+            return url;
+        })
+        .catch(function(error) {
+            console.error('Error getting download URL:', error);
+            return null;
+        });
+}
+
+// Helper function to list all files in Storage (useful for finding file paths)
+function listStorageFiles(folderPath = '') {
+    const folderRef = folderPath ? storage.ref(folderPath) : storage.ref();
+    return folderRef.listAll()
+        .then(function(result) {
+            console.log('Files found:');
+            const files = [];
+            result.items.forEach(function(itemRef) {
+                files.push(itemRef.fullPath);
+                console.log('- File path:', itemRef.fullPath);
+            });
+            
+            // Also check subfolders
+            result.prefixes.forEach(function(folderRef) {
+                console.log('- Folder:', folderRef.fullPath);
+            });
+            
+            return files;
+        })
+        .catch(function(error) {
+            console.error('Error listing files:', error);
+            return [];
+        });
+}
+
+// Export for use in console
+window.listStorageFiles = listStorageFiles;
+
+// Function to update download button URL from personalData
+function updateDownloadButtonUrl(personalData) {
+    if (personalData && personalData.downloadUrl) {
+        const downloadBtn = $('#download-btn');
+        if (downloadBtn.length) {
+            downloadBtn.attr('href', personalData.downloadUrl);
+            console.log('Download URL updated:', personalData.downloadUrl);
+        }
+    }
+}
 
 // SVG Icon variable (loaded from JSON file)
 let svgIcons = {};
@@ -33,6 +87,18 @@ function loadDataFromJSON() {
         leftColumnSections = results[1] || [];
         rightColumnSections = results[2] || [];
         personalData = results[3] || {};
+        
+        // Expose svgIcons to window for download button script
+        window.svgIcons = svgIcons;
+        
+        // Initialize download button icon after SVG icons are loaded
+        if (svgIcons.downloadIcon) {
+            $('#download-icon').html(svgIcons.downloadIcon);
+        }
+        
+        // Update download button URL from personalData
+        updateDownloadButtonUrl(personalData);
+        
         return {
             svgIcons: svgIcons,
             leftColumnSections: leftColumnSections,
@@ -120,15 +186,13 @@ function loadCVData() {
         rightColumnSections = jsonData.rightColumnSections;
         personalData = jsonData.personalData;
         
-        // Display JSON data immediately (without fade-in on render)
+        // Display JSON data immediately
         const sampleDataForRender = {
             sections: combineSections(leftColumnSections, rightColumnSections),
             personal: personalData
         };
         renderDynamicCV(sampleDataForRender);
         $('#cv-content').addClass('loaded');
-        // Initialize lazy loading for scroll-based animations only
-        initializeLazyLoading();
         
         // Then fetch from Firestore and replace with fetched data
         // Fetch new structure documents in parallel
@@ -179,13 +243,7 @@ function loadCVData() {
                 return;
             }
             
-            // Check if fetched data has unwanted fields before cleaning
-            const allSections = fetchedLeftSections.concat(fetchedRightSections);
-            const hasUnwantedFields = allSections.some(function(section) {
-                return section.hasOwnProperty('order') || section.hasOwnProperty('page') || section.hasOwnProperty('column');
-            });
-            
-            // Always clean order and page fields from fetched data
+            // Always clean order, page, and column fields from fetched data
             fetchedLeftSections = removeOrderFields(fetchedLeftSections);
             fetchedRightSections = removeOrderFields(fetchedRightSections);
 
@@ -194,10 +252,8 @@ function loadCVData() {
             rightColumnSections = fetchedRightSections;
             personalData = fetchedPersonalData;
             
-            // If data had unwanted fields, update Firestore with cleaned data
-            if (hasUnwantedFields) {
-                populateFirestoreData();
-            }
+            // Update download button URL from Firestore personalData (takes priority)
+            updateDownloadButtonUrl(personalData);
             
             // Convert to format expected by renderDynamicCV
             const fetchedDataForRender = {
@@ -205,11 +261,9 @@ function loadCVData() {
                 personal: fetchedPersonalData
             };
 
-            // Replace sample data with fetched data (without fade-in on render)
+            // Replace sample data with fetched data
             renderDynamicCV(fetchedDataForRender);
             $('#cv-content').addClass('loaded');
-            // Re-initialize lazy loading for scroll-based animations only
-            initializeLazyLoading();
         }).catch(function(error) {
             console.error('Error loading CV data from Firestore:', error);
         });
@@ -218,67 +272,6 @@ function loadCVData() {
     });
 }
 
-// Store observer instance globally to clean up if needed
-let lazyLoadingObserver = null;
-const observedSections = new Set(); // Track sections being observed
-
-// Intersection Observer for lazy loading fade-in (scroll-based only)
-function initializeLazyLoading() {
-    // Clean up existing observer if any
-    if (lazyLoadingObserver) {
-        observedSections.forEach(section => {
-            lazyLoadingObserver.unobserve(section);
-        });
-        observedSections.clear();
-        lazyLoadingObserver.disconnect();
-        lazyLoadingObserver = null;
-    }
-    
-    // Use requestAnimationFrame to ensure DOM is ready
-    requestAnimationFrame(() => {
-        // Get all sections
-        const sections = document.querySelectorAll('.skills-section, .education-section, .development-section, .summary-section, .experience-section, .languages-section, .references-section, .contact-section');
-        
-        // Create intersection observer for scroll-based fade-in
-        lazyLoadingObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                    // Use requestAnimationFrame for smooth animation trigger
-                    requestAnimationFrame(() => {
-                entry.target.classList.add('visible');
-                        lazyLoadingObserver.unobserve(entry.target);
-                        observedSections.delete(entry.target);
-                    });
-                }
-            });
-        }, {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
-        });
-
-        // Check each section: if already visible in viewport, render normally (no fade-in class)
-        // Otherwise, add fade-in class and observe for scroll-triggered animation
-        sections.forEach(section => {
-            // Remove any existing fade-in/visible classes
-            section.classList.remove('fade-in', 'visible');
-            
-            // Check if section is already visible in viewport
-            const rect = section.getBoundingClientRect();
-            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-            const isInViewport = rect.top < windowHeight + 100 && rect.bottom > -100;
-            
-            if (isInViewport) {
-                // Section is already visible, render normally without any animation classes
-                // (no fade-in class = full opacity by default)
-            } else {
-                // Section is not yet visible, add fade-in class for scroll animation
-                section.classList.add('fade-in');
-                lazyLoadingObserver.observe(section);
-                observedSections.add(section);
-            }
-        });
-    });
-}
 
 // Function to render sections dynamically
 function renderDynamicCV(data) {
