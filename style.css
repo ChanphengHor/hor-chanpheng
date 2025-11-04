@@ -83,10 +83,56 @@ body {
     justify-content: center;
     z-index: 1000;
     padding: 0;
+    animation: bounce 2s ease-in-out infinite;
+    transition: background-color 0.3s ease;
 }
 
 .download-floating-btn:hover {
     background-color: #2c3e50;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Download button content animation */
+.download-content {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+#download-text {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    white-space: pre-line;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: white;
+}
+
+.download-floating-btn:hover #download-text {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.8);
+}
+
+#download-icon {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+}
+
+.download-floating-btn:hover #download-icon {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 #download-icon svg {
@@ -95,6 +141,7 @@ body {
     fill: #ffffff;
     color: #ffffff;
 }
+
 
 /* CV Container */
 .cv-container {
