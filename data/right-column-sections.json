@@ -1,98 +1,98 @@
 [
     {
-        "id": "summary",
-        "type": "text",
-        "data": "Lines of code can create high-quality mobile apps that make people's everyday lives easier. I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too.",
-        "title": ""
+      "id": "summary",
+      "type": "text",
+      "data": "Lines of code can create high-quality mobile apps that make people's everyday lives easier. I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too.",
+      "title": ""
     },
     {
-        "title": "WORK EXPERIENCE",
-        "id": "experience",
-        "type": "experience-list",
-        "data": [
-            {
-                "company": "비플페이 주식회사 | BeplePay Co.,Ltd.",
-                "location": "Busan, South Korea | From 2023 to Present (3 Years Target)",
-                "achievements": [
-                    "Led development of payment applications serving 1.99M+ users",
-                    "Managed cross-functional teams and project implementation",
-                    "Implemented advanced payment security features",
-                    "Coordinated with Korean development teams"
-                ],
-                "description": "Responsible for leading the production of high-quality payment applications with over 1.99 million active users. Manage project implementation, feature planning, and task assignments with Korean development teams.",
-                "position": "과장 | Team Lead"
-            },
-            {
-                "company": "Webcash Group",
-                "location": "Seoul, South Korea | From 2019 to 2021 (2 Years)",
-                "achievements": [
-                    "Completed comprehensive Android development training",
-                    "Gained expertise in Java and Kotlin programming",
-                    "Developed project management skills",
-                    "Worked in international team environment"
-                ],
-                "description": "Completed a two-year professional training program focused on Android Development (Java, Kotlin) and project management skill development through overseas work experience.",
-                "position": "Trainee"
-            },
-            {
-                "company": "KOSIGN Investment Co.,Ltd.",
-                "description": "Started my career path in mobile Android development and advanced to managing projects, cross-platform mobile apps. Gained strong technical expertise, leadership experience, and delivered high-quality mobile apps.",
-                "achievements": [
-                    "Developed multiple Android applications",
-                    "Advanced to project management role",
-                    "Created cross-platform mobile solutions",
-                    "Delivered high-quality mobile applications"
-                ],
-                "position": "Senior Android Developer",
-                "location": "Phnom Penh | From 2018 to 2023 (5 Years 2 Months)"
-            },
-            {
-                "company": "KNGO Organization",
-                "location": "Battambang | From 2015 to 2017 (2 Years)",
-                "position": "English & Computer Instructor",
-                "achievements": [
-                    "Start with a new foundational experience and develop essential skills",
-                    "Explore and connect with people beyond my family and friends"
-                ],
-                "description": "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs."
-            }
-        ]
+      "title": "WORK EXPERIENCE",
+      "id": "experience",
+      "type": "experience-list",
+      "data": [
+        {
+          "company": "비플페이 주식회사 | BeplePay Co.,Ltd.",
+          "location": "Busan, South Korea | From 2023 to Present-",
+          "achievements": [
+            "Improved app performance through regular checks and updates.",
+            "Helped teams communicate well to keep projects moving smoothly.",
+            "Implemented consistent conditional logic and project flow across both iOS and Android applications",
+            "Gave tasks to team members and checked their progress.",
+            "Wrote weekly reports and shared updates with managers."
+          ],
+          "description": "Responsible for leading the production of high-quality payment applications with over 2 million active users. Managed projects across both iOS and Android platforms, including feature planning and task coordination with Korean development teams.",
+          "position": "과장 | Manager"
+        },
+        {
+          "company": "Webcash Group",
+          "location": "Seoul, South Korea | From 2019 to 2021 (2 Years)",
+          "achievements": [
+            "Completed comprehensive Android development training",
+            "Gained expertise in Java and Kotlin programming",
+            "Developed strong Korean communication skills by collaborating daily with Korean professionals and participating in joint development projects.",
+            "Broadened global business perspective"
+          ],
+          "description": "Completed a two-year professional training program focused on Android Development (Java, Kotlin) and project management skill development through overseas work experience.",
+          "position": "Trainee"
+        },
+        {
+          "company": "KOSIGN Investment Co.,Ltd.",
+          "description": "SStarted my career path in mobile Android development and advanced to managing projects, cross-platform mobile apps. Gained strong technical expertise, leadership experience, and delivered high-quality mobile apps.",
+          "achievements": [
+            "Strengthened teamwork and technical problem-solving",
+            "Promoted for outstanding performance and skill growth",
+            "Completed professional training at Webcash Group Seoul, South Korea.",
+            "Earned a promotion following successful completion of the training skill."
+          ],
+          "position": "Senior Android Developer",
+          "location": "Phnom Penh | From 2018 to 2023 (5 Years 2 Months)"
+        },
+        {
+          "company": "KNGO Organization",
+          "location": "Battambang | From 2015 to 2017 (2 Years)",
+          "position": "English & Computer Instructor",
+          "achievements": [
+            "Start with a new foundational experience and develop essential skills",
+            "Explore and connect with people beyond my family and friends"
+          ],
+          "description": "I was improving my English skills and collaborating with foreigners who share their culture and support children through cultural exchange programs."
+        }
+      ]
     },
     {
-        "id": "languages",
-        "title": "LANGUAGES",
-        "data": [
-            {
-                "name": "KHMER",
-                "proficiency": "Native Language"
-            },
-            {
-                "name": "ENGLISH",
-                "proficiency": "Good Writing, Good Reading, Good Listening & Speaking"
-            },
-            {
-                "name": "KOREAN",
-                "proficiency": "Excellent Writing, Good Reading, Good Listening & Speaking"
-            }
-        ],
-        "type": "language-list"
+      "id": "languages",
+      "title": "LANGUAGES",
+      "data": [
+        {
+          "name": "KHMER",
+          "proficiency": "Native Language"
+        },
+        {
+          "name": "ENGLISH",
+          "proficiency": "Good Writing, Good Reading, Good Listening & Speaking"
+        },
+        {
+          "name": "KOREAN",
+          "proficiency": "Excellent Writing, Good Reading, Good Listening & Speaking"
+        }
+      ],
+      "type": "language-list"
     },
     {
-        "data": [
-            {
-                "position": "Deputy General Manager",
-                "email": "myref@domain.com",
-                "name": "Mr. Chen Phirum"
-            },
-            {
-                "position": "Deputy General Manager",
-                "name": "Mr. Chen Phirum",
-                "email": "myref@domain.com"
-            }
-        ],
-        "type": "reference-list",
-        "id": "references",
-        "title": "REFERENCES"
+      "data": [
+        {
+          "position": "Deputy General Manager",
+          "email": "myref@domain.com",
+          "name": "Mr. Chen Phirum"
+        },
+        {
+          "position": "Deputy General Manager",
+          "name": "Mr. Chen Phirum",
+          "email": "myref@domain.com"
+        }
+      ],
+      "type": "reference-list",
+      "id": "references",
+      "title": "REFERENCES"
     }
-]
-
+  ]

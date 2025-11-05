@@ -1,114 +1,116 @@
 [
-    {
-      "title": "CONTACT ME",
-      "type": "contact",
-      "id": "contact",
-      "data": {
-        "phone": "+855 17 56 48 28",
-        "linkedin": "Hor Chanpheng",
-        "address": "Home No.6K Group 02, Street 149DT, Phnom Penh, Cambodia",
-        "website": "horchanpheng.web.app",
-        "email": "chanpheng123@gmail.com"
-      }
-    },
-    {
-      "id": "education",
-      "data": [
-        {
-          "location": "Phnom Penh / 2017 - 2018",
-          "degree": "Scholarship Student (I.T Expert)",
-          "institution": "Korea Software HRD Center"
-        },
-        {
-          "institution": "Build Bright University",
-          "degree": "Bachelor Degree (I.T)",
-          "location": "Battambang / 2013 - 2017"
-        },
-        {
-          "institution": "Net Yang High School",
-          "location": "Battambang / 2010 - 2013",
-          "degree": "High School Certificated"
-        }
-      ],
-      "type": "list",
-      "title": "EDUCATION"
-    },
-    {
-      "id": "development",
-      "data": [
-        "Korea Software HRD Center",
-        "Basic Course (Web Dev)",
-        "Advanced Course (Mobile Dev)",
-        "Overseas Training (South Korea)",
-        "Team Lead (Project Management)",
-        "Cross-Platform Management (iOS/AOS)",
-        "Company-Based Practical Skills"
-      ],
-      "type": "bullet-list",
-      "title": "SELF DEVELOPMENT"
-    },
-    {
-      "title": "SKILLS",
-      "id": "skills",
-      "type": "skills-list",
-      "data": [
-        {
-          "items": [
-            "Java",
-            "Kotlin",
-            "Coroutine",
-            "Compose"
-          ],
-          "category": "Android Development (Primary)"
-        },
-        {
-          "items": [
-            "Swift",
-            "Swift UI"
-          ],
-          "category": "iOS Development"
-        },
-        {
-          "category": "Flutter Development",
-          "items": [
-            "getx",
-            "bloc"
-          ]
-        },
-        {
-          "category": "Web Development",
-          "items": [
-            "Spring Framework",
-            "php",
-            "Node.js",
-            "JavaScript"
-          ]
-        },
-        {
-          "items": [
-            "AdobeXD",
-            "Figma",
-            "Zeplin"
-          ],
-          "category": "UI/UX Design"
-        },
-        {
-          "category": "Git"
-        },
-        {
-          "items": [
-            "Cloud Message",
-            "Remote Config",
-            "Secret Manager"
-          ],
-          "category": "Firebase"
-        },
-        {
-          "category": "Cursor AI"
-        },
-        {
-          "category": "ChatGPT"
-        }
-      ]
+  {
+    "title": "CONTACT ME",
+    "type": "contact",
+    "id": "contact",
+    "data": {
+      "phone": "017 56 40 28 (Telegram)",
+      "linkedin": "Hor Chanpheng",
+      "address": "Home No.6K Group 02, Street 149DT, Phnom Penh, Cambodia",
+      "website": "horchanpheng.web.app",
+      "email": "chanpheng123@gmail.com"
     }
-  ]
+  },
+  {
+    "id": "education",
+    "data": [
+      {
+        "location": "Phnom Penh / 2017 - 2018",
+        "degree": "Scholarship Student (I.T Expert)",
+        "institution": "Korea Software HRD Center"
+      },
+      {
+        "institution": "Build Bright University",
+        "degree": "Bachelor Degree (I.T)",
+        "location": "Battambang / 2013 - 2017"
+      },
+      {
+        "institution": "Net Yang High School",
+        "location": "Battambang / 2010 - 2013",
+        "degree": "High School Certificated"
+      }
+    ],
+    "type": "list",
+    "title": "EDUCATION"
+  },
+  {
+    "id": "development",
+    "data": [
+      "Korea Software HRD Center",
+      "Basic Course (Web Dev)",
+      "Advanced Course (Mobile Dev)",
+      "Overseas Training (South Korea)",
+      "Team Lead (Project Management)",
+      "Cross-Platform Management (iOS/AOS)",
+      "Company-Based Practical Skills"
+    ],
+    "type": "bullet-list",
+    "title": "SELF DEVELOPMENT"
+  },
+  {
+    "title": "SKILLS",
+    "id": "skills",
+    "type": "skills-list",
+    "data": [
+      {
+        "items": [
+          "Java",
+          "Kotlin",
+          "Coroutine",
+          "Compose"
+        ],
+        "category": "Android Development (Primary)"
+      },
+      {
+        "items": [
+          "Swift",
+          "Swift UI"
+        ],
+        "category": "iOS Development"
+      },
+      {
+        "category": "Flutter Development",
+        "items": [
+          "getx",
+          "bloc"
+        ]
+      },
+      {
+        "category": "Web Development",
+        "items": [
+          "Spring Framework",
+          "php",
+          "Node.js",
+          "JavaScript"
+        ]
+      },
+      {
+        "items": [
+          "AdobeXD",
+          "Figma",
+          "Zeplin"
+        ],
+        "category": "UI/UX Design"
+      },
+      {
+        "category": "Git"
+      },
+      {
+        "items": [
+          "Cloud Message",
+          "Remote Config",
+          "Secret Manager"
+        ],
+        "category": "Firebase"
+      },
+      {
+        "items": [
+          "Cursor AI",
+          "ChatGPT",
+          "AI Prompt Engineering"
+        ],
+        "category": "AI"
+      }
+    ]
+  }
+]
