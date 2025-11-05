@@ -7,7 +7,7 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "setup-cv-data.html"
+      "unnecessary/**"
     ],
     "rewrites": [
       {
