@@ -93,6 +93,14 @@
         "category": "UI/UX Design"
       },
       {
+        "items": [
+          "Flow",
+          "Jira",
+          "Notion"
+        ],
+        "category": "Collaboration Tools"
+      },
+      {
         "category": "Git"
       },
       {
