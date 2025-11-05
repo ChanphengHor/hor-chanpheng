@@ -1,19 +1,29 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Allow read access to all files
-    match /{allPaths=**} {
-      allow read;
+
+    // ✅ Public read-only files under /share_files/**
+    match /share_files/{path=**} {
+      allow read; // anyone can read
+      // (no write/delete here unless you add them explicitly)
     }
-    
-    // Allow write access to cv-files folder
+
+    // ✍️ Your existing writable folder for uploads (no public read)
     match /cv-files/{fileName} {
       allow write: if request.resource.size < 5 * 1024 * 1024 
                     && (request.resource.contentType.matches('image/.*') 
                         || request.resource.contentType.matches('application/pdf')
                         || request.resource.contentType.matches('application/msword')
                         || request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*'));
-      allow delete;
+      allow delete; // keep if you truly want anyone who can write to also delete
+      // (omit 'allow read' to keep these non-public)
+    }
+
+    // 🚫 Deny everything else by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+      // or, if you prefer authenticated access elsewhere:
+      // allow read, write: if request.auth != null;
     }
   }
-} 
+}
