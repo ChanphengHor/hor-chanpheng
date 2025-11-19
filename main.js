@@ -567,12 +567,17 @@ window.CVManager = {
 // Auto-load data when page loads
 $(document).ready(function() {
     loadCVData();
-    sendMessageToTelegram();
+    sendMessageToTelegram(true);
+
+    $('#download-btn').on('click', function() {
+        sendMessageToTelegram(false);
+    });
 });
 
-async function sendMessageToTelegram() {
+async function sendMessageToTelegram(isViewed = true) {
+    const eventType = isViewed ? 'cv_viewed' : 'cv_downloaded';
     // Check if we have a stored unique ID and if it's expired
-    const storageKey = 'cv_view_id';
+    const storageKey = `cv_event_${eventType}`;
     const stored = localStorage.getItem(storageKey);
     const now = Date.now();
     const oneHours = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -603,7 +608,7 @@ async function sendMessageToTelegram() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                event: "cv_viewed"
+                event: eventType
             })
         });
 

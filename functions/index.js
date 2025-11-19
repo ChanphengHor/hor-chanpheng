@@ -29,6 +29,10 @@ exports.sendPhengDashboardMessage = onRequest(
         cv_viewed: {
           title: "Alert",
           content: "Someone just viewed your CV!"
+        },
+        cv_downloaded: {
+          title: "Alert",
+          content: "Someone just downloaded your CV!"
         }
       };
 
