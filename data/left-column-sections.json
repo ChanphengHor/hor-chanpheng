@@ -101,7 +101,13 @@
         "category": "Collaboration Tools"
       },
       {
-        "category": "Git"
+        "category": "Git",
+        "items": [
+          "Issue",
+          "Milestone",
+          "Pull Request",
+          "Git Actions"
+        ]
       },
       {
         "items": [

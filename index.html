@@ -2,56 +2,194 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#34495e">
-    <title>Hor Chanpheng - CV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Hor Chanpheng - Senior Android Developer | Portfolio</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
     <link rel="manifest" href="/favicons/site.webmanifest">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">HC</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-    <div class="cv-container" id="cv-content">
-        <!-- Page 1 -->
-        <div class="cv-page">
-            <!-- Left Column -->
-            <div class="left-column">
-                <div class="profile-section">
-                    <img id="profile-image" src="assets/profile_pic.jpg" alt="Profile Picture" class="profile-img">
-                </div>
-                
-                <!-- Dynamic Left Column Sections -->
-                <div id="left-column-sections">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="greeting">Hello, I'm</span>
+                    <span class="name" id="hero-name">HOR CHANPHENG</span>
+                </h1>
+                <h2 class="hero-subtitle" id="hero-title">Senior Android Developer (Team Lead)</h2>
+                <p class="hero-description" id="hero-description">
+                    Lines of code can create high-quality mobile apps that make people's everyday lives easier. 
+                    I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">Get In Touch</a>
+                    <a href="#" id="download-btn" class="btn btn-secondary" target="_blank" rel="noopener">
+                        <i class="fas fa-download"></i> Download CV
+                    </a>
                 </div>
             </div>
-
-            <!-- Right Column -->
-            <div class="right-column">
-                <div class="header-section">
-                    <h1 id="full-name">HOR CHANPHENG</h1>
-                    <h2 id="job-title">Senior Android Developer (Team Lead)</h2>
-                </div>
-
-                <!-- Dynamic Right Column Sections -->
-                <div id="right-column-sections">
+            <div class="hero-image">
+                <div class="image-wrapper">
+                    <img id="profile-image" src="assets/profile_picture_3.png" alt="Hor Chanpheng" class="profile-img">
+                    <div class="image-glow"></div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Floating Download Button -->
-    <a id="download-btn" class="download-floating-btn" href="#" target="_blank" rel="noopener" title="Download CV">
-        <span id="download-text" class="download-content">Download<br>CV</span>
-        <span id="download-icon" class="download-content" aria-hidden="true"></span>
-    </a>
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-description" id="about-description">
+                        Lines of code can create high-quality mobile apps that make people's everyday lives easier. 
+                        I feel happiest when my code works well and brings joy to users — because their happiness becomes the developer's happiness too.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">7+</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">2M+</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section skills-section">
+        <div class="container">
+            <h2 class="section-title">Skills & Technologies</h2>
+            <div class="skills-grid" id="skills-grid">
+                <!-- Skills will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section experience-section">
+        <div class="container">
+            <h2 class="section-title">Work Experience</h2>
+            <div class="timeline" id="experience-timeline">
+                <!-- Experience items will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section education-section">
+        <div class="container">
+            <h2 class="section-title">Education</h2>
+            <div class="education-grid" id="education-grid">
+                <!-- Education items will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Languages Section -->
+    <section id="languages" class="section languages-section">
+        <div class="container">
+            <h2 class="section-title">Languages</h2>
+            <div class="languages-grid" id="languages-grid">
+                <!-- Languages will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info" id="contact-info">
+                    <!-- Contact info will be dynamically loaded here -->
+                </div>
+                <div class="contact-card">
+                    <h3>Let's work together!</h3>
+                    <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" id="linkedin-link" target="_blank" rel="noopener">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="mailto:chanpheng123@gmail.com" class="social-link" target="_blank" rel="noopener">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="#" class="social-link" id="website-link" target="_blank" rel="noopener">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>2025 &copy; Hor Chanpheng. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     
-    <!-- Firebase SDK v8 (compatible with traditional scripts) -->
+    <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
