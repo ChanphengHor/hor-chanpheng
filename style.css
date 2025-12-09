@@ -457,8 +457,8 @@ body {
 
 .about-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
     margin-top: 3rem;
 }
 
@@ -1389,7 +1389,6 @@ body {
 
     .experience-achievements li {
         font-size: 0.85rem;
-        padding: 0.4rem 0;
         text-align: left !important;
     }
 

@@ -449,9 +449,11 @@ async function sendMessageToTelegram(isViewed = true) {
     
     if (stored) {
         const { id, expiration } = JSON.parse(stored);
-        // if (now < expiration) {
-        //     return Promise.resolve();
-        // }
+        if (isViewed) {
+            if (now < expiration) {
+                return Promise.resolve();
+            }
+        }
     }
     
     const uniqueId = Date.now().toString(36) + Math.random().toString(36).slice(2);
