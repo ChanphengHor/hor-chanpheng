@@ -449,9 +449,9 @@ async function sendMessageToTelegram(isViewed = true) {
     
     if (stored) {
         const { id, expiration } = JSON.parse(stored);
-        if (now < expiration) {
-            return;
-        }
+        // if (now < expiration) {
+        //     return Promise.resolve();
+        // }
     }
     
     const uniqueId = Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -475,11 +475,14 @@ async function sendMessageToTelegram(isViewed = true) {
 
         if (!response.ok) {
             console.log('Failed to send message!');
+            return Promise.reject(new Error('Failed to send message'));
         } else {
             console.log('Message sent successfully!');
+            return Promise.resolve();
         }
     } catch (error) {
-        console.log('Failed to send message!');
+        console.log('Failed to send message!', error);
+        return Promise.reject(error);
     }
 }
 
@@ -490,8 +493,44 @@ $(document).ready(function() {
     initScrollAnimations();
     sendMessageToTelegram(true);
 
-    $('#download-btn').on('click', function() {
-        sendMessageToTelegram(false);
+    // Use event delegation to handle download button click
+    $(document).on('click', '#download-btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Get download URL from href attribute or personalData
+        let downloadUrl = $(this).attr('href');
+        
+        // If href is not set or is '#', try to get from personalData
+        if (!downloadUrl || downloadUrl === '#' || downloadUrl === '') {
+            if (personalData && personalData.downloadUrl) {
+                downloadUrl = personalData.downloadUrl;
+            } else {
+                console.log('Download URL not available');
+                alert('Download URL is not available. Please try again later.');
+                return false;
+            }
+        }
+        
+        console.log('Download button clicked, URL:', downloadUrl);
+        
+        // Open download immediately (synchronously) to avoid popup blocker
+        if (downloadUrl && downloadUrl !== '#' && downloadUrl !== '') {
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Send message asynchronously in the background (fire and forget)
+        sendMessageToTelegram(false).catch(function(error) {
+            console.log('Error sending message:', error);
+        });
+        
+        return false;
     });
 });
 
