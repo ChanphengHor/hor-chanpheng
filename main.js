@@ -328,6 +328,16 @@ function renderContact(sections) {
             contactInfo.append(item);
         }
         
+        // Telegram - clickable link
+        const telegramItem = $('<a>').addClass('contact-item contact-link').attr('href', 'https://t.me/horchanpheng').attr('target', '_blank').attr('rel', 'noopener');
+        if (svgIcons.telegramIcon) {
+            telegramItem.append(svgIcons.telegramIcon);
+        } else {
+            telegramItem.append($('<i>').addClass('fab fa-telegram-plane'));
+        }
+        telegramItem.append($('<span>').text('Telegram'));
+        contactInfo.append(telegramItem);
+        
         if (data.email) {
             const item = $('<div>').addClass('contact-item');
             if (svgIcons.email) {

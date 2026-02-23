@@ -809,6 +809,12 @@ body {
     box-shadow: var(--shadow-lg);
 }
 
+.contact-item.contact-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
 .contact-item i,
 .contact-item svg {
     width: 24px;
